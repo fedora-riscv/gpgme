@@ -1,6 +1,6 @@
 Name:           gpgme
 Version:        0.4.3
-Release:        0.fdr.3.1
+Release:        0.fdr.3.2
 Epoch:          0
 Summary:        GnuPG Made Easy
 
