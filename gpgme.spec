@@ -19,6 +19,8 @@ BuildRequires: libgpg-error-devel >= 0:0.5
 Requires: gnupg >= 0:1.2.2
 Requires: gnupg2 >= 0:1.9.6
 
+Obsoletes: cryptplug <= 0:0.3.16-2
+
 %description
 GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
 easier for applications.  It provides a high-level crypto API for
@@ -95,6 +97,7 @@ fi
 * Tue Feb  1 2005 Michael Schwendt <mschwendt[AT]users.sf.net> - 0:1.0.2-1
 - LGPL used here, and made summary more explicit.
 - Remove dirmngr dependency (gpgsm interfaces with it).
+- Obsolete cryptplug as gpgme >= 0.4.5 provides what we used cryptplug for.
 
 * Thu Jan 06 2005 Rex Dieter <rexdieter[AT]users.sf.net> 0:1.0.2-0.fdr.1
 - 1.0.2
