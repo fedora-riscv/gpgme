@@ -1,19 +1,23 @@
-Name:           gpgme
-Version:        0.4.3
-Release:        4
-Epoch:          0
-Summary:        GnuPG Made Easy
 
-License:        GPL
-Group:          Applications/System
-URL:            http://www.gnupg.org/related_software/gpgme/
-Source:         ftp://ftp.gnupg.org/gcrypt/alpha/gpgme/gpgme-0.4.3.tar.gz
-Patch:          gpgme-0.4.3-select.patch
+Name:	 gpgme
+Epoch:	 0
+Version: 1.0.2
+Release: 1%{?dist_tag}
+Summary: GnuPG Made Easy - high level crypto API
+License: LGPL
+Group:   Applications/System
+URL:     http://www.gnupg.org/related_software/gpgme/
+Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.0.2.tar.bz2
+Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.0.2.tar.bz2.sig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  gnupg >= 0:1.2.2, %{_bindir}/gpgsm, pth-devel
-BuildRequires:  libgpg-error-devel >= 0:0.5
-Requires:       gnupg >= 0:1.2.2, %{_bindir}/gpgsm
+BuildRequires: gnupg >= 0:1.2.2
+BuildRequires: gnupg2 >= 0:1.9.6
+BuildRequires: pth-devel
+BuildRequires: libgpg-error-devel >= 0:0.5
+
+Requires: gnupg >= 0:1.2.2
+Requires: gnupg2 >= 0:1.9.6
 
 %description
 GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -21,35 +25,38 @@ easier for applications.  It provides a high-level crypto API for
 encryption, decryption, signing, signature verification and key
 management.
 
-%package        devel
-Summary:        Static libraries and header files from GPGME, GnuPG Made Easy
-Group:          Development/Libraries
-Requires:       %{name} = %{epoch}:%{version}-%{release}, libgpg-error-devel
+%package devel
+Summary:  Static libraries and header files from GPGME, GnuPG Made Easy
+Group:    Development/Libraries
+Requires: %{name} = %{epoch}:%{version}-%{release}
+Requires: libgpg-error-devel
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
-
 %description    devel
 Static libraries and header files from GPGME, GnuPG Made Easy.
 
 
 %prep
 %setup -q
-%patch -p1 -b .select
 
 
 %build
-%configure --enable-static
+%configure \
+  --program-prefix="%{?_program_prefix}" \
+  --enable-static
+
 make %{?_smp_mflags}
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
+
 rm -f $RPM_BUILD_ROOT{%{_infodir}/dir,%{_libdir}/*.la}
 
 
 %check || :
-make check
+make check 
 
 
 %clean
@@ -59,19 +66,19 @@ rm -rf $RPM_BUILD_ROOT
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
+
 %post devel
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
 
 %postun devel
 if [ $1 -eq 0 ] ; then
-  /sbin/install-info --delete %{_infodir}/%{name}.info \
-    %{_infodir}/dir 2>/dev/null || :
+  /sbin/install-info --delete %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
 fi
 
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING ChangeLog NEWS README* THANKS TODO VERSION
+%doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
 %{_libdir}/libgpgme*.so.*
 
 %files devel
@@ -85,8 +92,19 @@ fi
 
 
 %changelog
-* Tue Dec 14 2004 Michael Schwendt <mschwendt[AT]users.sf.net> - 0:0.4.3-4
-- Add similar fd select race/lockup fix as for GPGME 0.3.16.
+* Tue Feb  1 2005 Michael Schwendt <mschwendt[AT]users.sf.net> - 0:1.0.2-1
+- LGPL used here, and made summary more explicit.
+- Remove dirmngr dependency (gpgsm interfaces with it).
+
+* Thu Jan 06 2005 Rex Dieter <rexdieter[AT]users.sf.net> 0:1.0.2-0.fdr.1
+- 1.0.2
+
+* Thu Oct 21 2004 Rex Dieter <rexdieter at sf.net> 0:1.0.0-0.fdr.1
+- 1.0.0
+- Requires: dirmngr
+
+* Tue Oct 19 2004 Rex Dieter <rexdieter at sf.net> 0:0.4.7-0.fdr.1
+- 0.4.7
 
 * Sun May  2 2004 Ville Skyttä <ville.skytta at iki.fi> - 0:0.4.3-0.fdr.3
 - Require %%{_bindir}/gpgsm instead of newpg.
