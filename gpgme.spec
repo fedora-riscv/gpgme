@@ -1,6 +1,4 @@
-
-Name:	 gpgme
-Epoch:	 0
+Name:    gpgme
 Version: 1.0.2
 Release: 1%{?dist_tag}
 Summary: GnuPG Made Easy - high level crypto API
@@ -9,17 +7,17 @@ Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.0.2.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.0.2.tar.bz2.sig
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: gnupg >= 0:1.2.2
-BuildRequires: gnupg2 >= 0:1.9.6
+BuildRequires: gnupg >= 1.2.2
+BuildRequires: gnupg2 >= 1.9.6
 BuildRequires: pth-devel
-BuildRequires: libgpg-error-devel >= 0:0.5
+BuildRequires: libgpg-error-devel >= 0.5
 
-Requires: gnupg >= 0:1.2.2
-Requires: gnupg2 >= 0:1.9.6
+Requires: gnupg >= 1.2.2
+Requires: gnupg2 >= 1.9.6
 
-Obsoletes: cryptplug <= 0:0.3.16-2
+Obsoletes: cryptplug <= 0.3.16-2
 
 %description
 GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -30,7 +28,7 @@ management.
 %package devel
 Summary:  Static libraries and header files from GPGME, GnuPG Made Easy
 Group:    Development/Libraries
-Requires: %{name} = %{epoch}:%{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
@@ -58,7 +56,7 @@ rm -f $RPM_BUILD_ROOT{%{_infodir}/dir,%{_libdir}/*.la}
 
 
 %check || :
-make check 
+make check
 
 
 %clean
