@@ -1,0 +1,11 @@
+diff -Nur gpgme-0.4.3-orig/gpgme/wait-private.c gpgme-0.4.3/gpgme/wait-private.c
+--- gpgme-0.4.3-orig/gpgme/wait-private.c	2003-07-31 17:20:56.000000000 +0200
++++ gpgme-0.4.3/gpgme/wait-private.c	2004-12-13 20:15:43.758995584 +0100
+@@ -121,6 +121,7 @@
+ 		  _gpgme_engine_io_event (ctx->engine, GPGME_EVENT_DONE, &err);
+ 		  return err;
+ 		}
++	      break;
+ 	    }
+ 	}
+ 

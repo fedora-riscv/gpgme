@@ -1,6 +1,6 @@
 Name:           gpgme
 Version:        0.4.3
-Release:        3
+Release:        4
 Epoch:          0
 Summary:        GnuPG Made Easy
 
@@ -8,6 +8,7 @@ License:        GPL
 Group:          Applications/System
 URL:            http://www.gnupg.org/related_software/gpgme/
 Source:         ftp://ftp.gnupg.org/gcrypt/alpha/gpgme/gpgme-0.4.3.tar.gz
+Patch:          gpgme-0.4.3-select.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gnupg >= 0:1.2.2, %{_bindir}/gpgsm, pth-devel
@@ -33,6 +34,7 @@ Static libraries and header files from GPGME, GnuPG Made Easy.
 
 %prep
 %setup -q
+%patch -p1 -b .select
 
 
 %build
@@ -83,6 +85,9 @@ fi
 
 
 %changelog
+* Tue Dec 14 2004 Michael Schwendt <mschwendt[AT]users.sf.net> - 0:0.4.3-4
+- Add similar fd select race/lockup fix as for GPGME 0.3.16.
+
 * Sun May  2 2004 Ville Skyttä <ville.skytta at iki.fi> - 0:0.4.3-0.fdr.3
 - Require %%{_bindir}/gpgsm instead of newpg.
 - Cosmetic spec file improvements.
