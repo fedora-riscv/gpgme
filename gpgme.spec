@@ -1,13 +1,13 @@
 Name:    gpgme
 Version: 1.0.2
-Release: 2%{?dist_tag}
+Release: 3%{?dist}
 Summary: GnuPG Made Easy - high level crypto API
 License: LGPL
 Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
-Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.0.2.tar.bz2
-Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-1.0.2.tar.bz2.sig
-Patch0:  %{name}-1.0.2-macro.patch
+Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
+Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
+Patch0:  gpgme-1.0.2-macro.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: gnupg >= 1.2.2
@@ -94,6 +94,9 @@ fi
 
 
 %changelog
+* Thu May 12 2005 Michael Schwendt <mschwendt[AT]users.sf.net> - 1.0.2-3
+- rebuilt
+
 * Fri Mar 18 2005 Ville Skyttä <ville.skytta at iki.fi> - 1.0.2-2
 - Fix FC4 build.
 
