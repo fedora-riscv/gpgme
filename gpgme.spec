@@ -1,14 +1,17 @@
+
 Name:    gpgme
-Version: 1.0.2
-Release: 3%{?dist}
 Summary: GnuPG Made Easy - high level crypto API
+Version: 1.0.3
+Release: 1%{?dist}
+
 License: LGPL
 Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
-Patch0:  gpgme-1.0.2-macro.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Patch0:  gpgme-1.0.2-macro.patch
 
 BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
@@ -33,28 +36,30 @@ Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
-%description    devel
+%description devel
 Static libraries and header files from GPGME, GnuPG Made Easy.
 
 
 %prep
 %setup -q
+
 %patch0 -p0
 
 
 %build
 %configure \
-  --program-prefix="%{?_program_prefix}" \
-  --enable-static
+  --disable-static
 
 make %{?_smp_mflags}
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 make install DESTDIR=$RPM_BUILD_ROOT
 
-rm -f $RPM_BUILD_ROOT{%{_infodir}/dir,%{_libdir}/*.la}
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 
 %check || :
@@ -66,8 +71,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
 
+%postun -p /sbin/ldconfig
 
 %post devel
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
@@ -81,19 +86,23 @@ fi
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
-%{_libdir}/libgpgme*.so.*
+%{_libdir}/lib*.so.*
 
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/gpgme-config
-%{_includedir}/gpgme.h
-%{_libdir}/libgpgme*.a
-%{_libdir}/libgpgme*.so
+%{_includedir}/*
+#{_libdir}/lib*.a
+%{_libdir}/lib*.so
 %{_datadir}/aclocal/gpgme.m4
 %{_infodir}/gpgme.info*
 
 
 %changelog
+* Mon Aug  8 2005 Rex Dieter <rexdieter[AT]users.sf.net> - 1.0.3-1
+- 1.0.3
+- --disable-static
+
 * Thu May 12 2005 Michael Schwendt <mschwendt[AT]users.sf.net> - 1.0.2-3
 - rebuilt
 
