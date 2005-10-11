@@ -1,7 +1,7 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.0.3
+Version: 1.1.0
 Release: 1%{?dist}
 
 License: LGPL
@@ -11,12 +11,12 @@ Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Patch0:  gpgme-1.0.2-macro.patch
+Patch1: gpgme-1.1.0-tests.patch
 
 BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
-BuildRequires: pth-devel
 BuildRequires: libgpg-error-devel >= 0.5
+BuildRequires: pth-devel
 
 Requires: gnupg >= 1.2.2
 Requires: gnupg2 >= 1.9.6
@@ -30,20 +30,20 @@ encryption, decryption, signing, signature verification and key
 management.
 
 %package devel
-Summary:  Static libraries and header files from GPGME, GnuPG Made Easy
+Summary:  Libraries and header files from GPGME, GnuPG Made Easy
 Group:    Development/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
 %description devel
-Static libraries and header files from GPGME, GnuPG Made Easy.
+%{summary}
 
 
 %prep
 %setup -q
 
-%patch0 -p0
+%patch1 -p1 -b .tests
 
 
 %build
@@ -92,13 +92,15 @@ fi
 %defattr(-,root,root,-)
 %{_bindir}/gpgme-config
 %{_includedir}/*
-#{_libdir}/lib*.a
 %{_libdir}/lib*.so
 %{_datadir}/aclocal/gpgme.m4
 %{_infodir}/gpgme.info*
 
 
 %changelog
+* Thu Oct 06 2005 Rex Dieter <rexdieter[AT]users.sf.net> - 1.1.0-1
+- 1.1.0
+
 * Mon Aug  8 2005 Rex Dieter <rexdieter[AT]users.sf.net> - 1.0.3-1
 - 1.0.3
 - --disable-static
