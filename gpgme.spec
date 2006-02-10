@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.0
-Release: 2%{?dist}
+Release: 3%{?dist}.1
 
 License: LGPL
 Group:   Applications/System
@@ -16,7 +16,7 @@ Patch1: gpgme-1.1.0-tests.patch
 BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
 BuildRequires: libgpg-error-devel >= 0.5
-BuildRequires: pth-devel
+BuildRequires: pth-devel >= 2.0.4
 
 Requires: gnupg >= 1.2.2
 Requires: gnupg2 >= 1.9.6
@@ -30,7 +30,7 @@ encryption, decryption, signing, signature verification and key
 management.
 
 %package devel
-Summary:  Libraries and header files from GPGME, GnuPG Made Easy
+Summary:  Development headers and libraries for %{name}
 Group:    Development/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
@@ -63,7 +63,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 
 %check || :
-make check
+# expect 1(+?) errors with gnupg < 1.2.4
+make check 
 
 
 %clean
@@ -98,6 +99,12 @@ fi
 
 
 %changelog
+* Fri Feb 10 2006 Rex Dieter <rexdieter[AT]users.sf.net>
+- fc5: gcc/glibc respin
+
+* Wed Nov 30 2005 Rex Dieter <rexdieter[AT]users.sf.net> - 1.1.0-3
+- (re)build against (newer) libksba/gnupg2
+
 * Thu Oct 06 2005 Rex Dieter <rexdieter[AT]users.sf.net> - 1.1.0-2
 - 1.1.0
 
