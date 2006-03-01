@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.0
-Release: 3%{?dist}.1
+Release: 3%{?dist}.2
 
 License: LGPL
 Group:   Applications/System
@@ -99,7 +99,7 @@ fi
 
 
 %changelog
-* Fri Feb 10 2006 Rex Dieter <rexdieter[AT]users.sf.net>
+* Wed Mar 1 2006 Rex Dieter <rexdieter[AT]users.sf.net>
 - fc5: gcc/glibc respin
 
 * Wed Nov 30 2005 Rex Dieter <rexdieter[AT]users.sf.net> - 1.1.0-3
