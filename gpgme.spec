@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.0
-Release: 3%{?dist}.2
+Version: 1.1.2
+Release: 1%{?dist}
 
 License: LGPL
 Group:   Applications/System
@@ -10,8 +10,6 @@ URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
-Patch1: gpgme-1.1.0-tests.patch
 
 BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
@@ -42,8 +40,6 @@ Requires(postun): /sbin/install-info
 
 %prep
 %setup -q
-
-%patch1 -p1 -b .tests
 
 
 %build
@@ -99,6 +95,10 @@ fi
 
 
 %changelog
+* Fri Mar 3 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-1
+- 1.1.2
+- drop upstreamed gpgme-1.1.0-tests.patch
+
 * Wed Mar 1 2006 Rex Dieter <rexdieter[AT]users.sf.net>
 - fc5: gcc/glibc respin
 
