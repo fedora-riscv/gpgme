@@ -1,0 +1,24 @@
+--- gpgme-1.1.2/gpgme/gpgme-config.in.config_extras	2005-11-18 17:03:28.000000000 -0600
++++ gpgme-1.1.2/gpgme/gpgme-config.in	2006-03-06 08:50:57.000000000 -0600
+@@ -16,15 +16,19 @@
+ 
+ # Configure libgpg-error.
+ gpg_error_cflags="@GPG_ERROR_CFLAGS@"
+-gpg_error_libs="@GPG_ERROR_LIBS@"
++#gpg_error_libs="@GPG_ERROR_LIBS@"
+ 
+ # Configure thread packages.
+ thread_modules=""
+ 
+ @HAVE_PTH_TRUE@thread_modules="$thread_modules pth"
+-libs_pth="@PTH_LDFLAGS@ @PTH_LIBS@"
++#libs_pth="@PTH_LDFLAGS@ @PTH_LIBS@"
+ cflags_pth="@PTH_CFLAGS@"
+ 
++@HAVE_PTHREAD_TRUE@thread_modules="$thread_modules pthread"
++#libs_pthread="@PTHREAD_LDFLAGS@ @PTHREAD_LIBS@"
++cflags_pthread="@PTHREAD_CFLAGS@"
++
+ # Configure glib.
+ libs_glib="@GLIB_LIBS@"
+ cflags_glib="@GLIB_CFLAGS@"
