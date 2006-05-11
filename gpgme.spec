@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.2
-Release: 1%{?dist}
+Release: 3%{?dist}
 
 License: LGPL
 Group:   Applications/System
@@ -10,6 +10,8 @@ URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Patch1: gpgme-1.1.2-config_extras.patch
 
 BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
@@ -40,6 +42,8 @@ Requires(postun): /sbin/install-info
 
 %prep
 %setup -q
+
+%patch1 -p1 -b .config_extras
 
 
 %build
@@ -95,6 +99,12 @@ fi
 
 
 %changelog
+* Mon Mar 6 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-3
+- add back support for gpgme-config --thread=pthread
+
+* Mon Mar 6 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-2
+- drop extraneous libs from gpgme-config
+
 * Fri Mar 3 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-1
 - 1.1.2
 - drop upstreamed gpgme-1.1.0-tests.patch
