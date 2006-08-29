@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPL
 Group:   Applications/System
@@ -99,6 +99,9 @@ fi
 
 
 %changelog
+* Tue Aug 29 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-5
+- fc6 respin
+
 * Mon Mar 6 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-4
 - add back support for gpgme-config --thread=pthread
 
