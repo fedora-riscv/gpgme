@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.2
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPL
 Group:   Applications/System
@@ -17,6 +17,8 @@ BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
 BuildRequires: libgpg-error-devel >= 0.5
 BuildRequires: pth-devel >= 2.0.4
+# Not really used, only for win32 build
+#BuildRequires: glib2-devel
 
 Requires: gnupg >= 1.2.2
 Requires: gnupg2 >= 1.9.6
@@ -99,6 +101,9 @@ fi
 
 
 %changelog
+* Mon Sep 18 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-6
+- fix gpgme-config --thread=pthread --cflags
+
 * Tue Aug 29 2006 Rex Dieter <rexdieter[AT]users.sf.net> 1.1.2-5
 - fc6 respin
 
