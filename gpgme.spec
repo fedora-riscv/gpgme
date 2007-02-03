@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.2
-Release: 6%{?dist}.1
+Version: 1.1.3
+Release: 1%{?dist}
 
 License: LGPL
 Group:   Applications/System
@@ -11,7 +11,7 @@ Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Patch1: gpgme-1.1.2-config_extras.patch
+Patch1: gpgme-1.1.3-config_extras.patch
 
 BuildRequires: gnupg >= 1.2.2
 BuildRequires: gnupg2 >= 1.9.6
@@ -60,8 +60,10 @@ rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT
 
+# unpackaged files
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 
 
 %check || :
@@ -86,6 +88,7 @@ if [ $1 -eq 0 ] ; then
 fi
 
 
+
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
@@ -100,7 +103,12 @@ fi
 %{_infodir}/gpgme.info*
 
 
+
+
 %changelog
+* Sat Feb 03 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.3-1
+- gpgme-1.1.3
+
 * Tue Oct 03 2006 Rex Dieter <rexdieter[AT]users.sf.net>
 - respin
 
