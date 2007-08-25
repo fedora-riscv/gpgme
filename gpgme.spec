@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -104,9 +104,10 @@ fi
 %{_infodir}/gpgme.info*
 
 
-
-
 %changelog
+* Sat Aug 25 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-3
+- respin (BuildID)
+
 * Thu Aug 09 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-2
 - License: LGPLv2+
 
