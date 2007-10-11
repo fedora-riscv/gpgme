@@ -1,10 +1,10 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.4
-Release: 1%{?dist}
+Version: 1.1.5
+Release: 4%{?dist}
 
-License: LGPL
+License: LGPLv2+
 Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
@@ -13,6 +13,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: gpgme-1.1.3-config_extras.patch
 
+BuildRequires: gawk
 BuildRequires: gnupg
 BuildRequires: gnupg2
 BuildRequires: libgpg-error-devel
@@ -104,9 +105,19 @@ fi
 %{_infodir}/gpgme.info*
 
 
-
-
 %changelog
+* Sat Aug 25 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-4
+- BR: gawk
+
+* Sat Aug 25 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-3
+- respin (BuildID)
+
+* Thu Aug 09 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-2
+- License: LGPLv2+
+
+* Mon Jul 09 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-1
+- gpgme-1.1.5
+
 * Mon Mar 05 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.4-1
 - gpgme-1.1.4
 
