@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.5
-Release: 4%{?dist}
+Version: 1.1.6
+Release: 1%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -49,6 +49,10 @@ Requires(postun): /sbin/install-info
 
 %patch1 -p1 -b .config_extras
 
+## HACK ALERT
+# The config script already suppresses the -L if it's /usr/lib, so cheat and
+# set it to a value which we know will be suppressed.
+sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' gpgme/gpgme-config.in
 
 %build
 %configure \
@@ -94,18 +98,22 @@ fi
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
-%{_libdir}/lib*.so.*
+%{_libdir}/libgpgme*.so.*
 
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/gpgme-config
 %{_includedir}/*
-%{_libdir}/lib*.so
+%{_libdir}/libgpgme*.so
 %{_datadir}/aclocal/gpgme.m4
 %{_infodir}/gpgme.info*
 
 
 %changelog
+* Fri Jan 04 2008 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.6-1
+- gpgme-1.1.6
+- multiarch conflicts in gpgme (#341351)
+
 * Sat Aug 25 2007 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.5-4
 - BR: gawk
 
