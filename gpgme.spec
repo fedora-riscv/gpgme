@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -111,6 +111,9 @@ fi
 
 
 %changelog
+* Fri Feb 08 2008 Rex Dieter <rdieter@fedoraproject.org> 1.1.6-2 
+- respin (gcc43)
+
 * Fri Jan 04 2008 Rex Dieter <rdieter[AT]fedoraproject.org> 1.1.6-1
 - gpgme-1.1.6
 - multiarch conflicts in gpgme (#341351)
