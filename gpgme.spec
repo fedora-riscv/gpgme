@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -21,7 +21,6 @@ BuildRequires: pth-devel
 # Not really used, only for win32 build
 #BuildRequires: glib2-devel
 
-Requires: gnupg
 Requires: gnupg2
 
 # Hasn't existed for a *long* time.
@@ -56,7 +55,8 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' gpgme/gpgme-config.in
 
 %build
 %configure \
-  --disable-static
+  --disable-static \
+  --with-gpg=%{_bindir}/gpg2
 
 make %{?_smp_mflags}
 
@@ -111,6 +111,10 @@ fi
 
 
 %changelog
+* Sun Feb 17 2008 Rex Dieter <rdieter@fedoraproject.org> 1.1.6-3
+- --with-gpg=%%_bindir/gpg2 (#432445)
+- drop Requires: gnupg (#432445)
+
 * Fri Feb 08 2008 Rex Dieter <rdieter@fedoraproject.org> 1.1.6-2 
 - respin (gcc43)
 
