@@ -56,7 +56,7 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' gpgme/gpgme-config.in
 %build
 %configure \
   --disable-static \
-  --with-gpg=%{_bindir}/gpg2
+  --with-gpg=%{_bindir}/gpg2 --disable-gpg-test
 
 make %{?_smp_mflags}
 
@@ -75,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 %check || :
 # expect 1(+?) errors with gnupg < 1.2.4
 # gpgme-1.1.6 includes one known failure (FAIL: t-sign)
-make check ||:
+make -C tests check ||:
 
 
 %clean
