@@ -72,7 +72,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 
 
-%check || :
+%check 
 # expect 1(+?) errors with gnupg < 1.2.4
 # gpgme-1.1.6 includes one known failure (FAIL: t-sign)
 make -C tests check ||:
