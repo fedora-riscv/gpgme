@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.6
-Release: 3%{?dist}
+Version: 1.1.7
+Release: 1%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -18,13 +18,8 @@ BuildRequires: gnupg
 BuildRequires: gnupg2
 BuildRequires: libgpg-error-devel
 BuildRequires: pth-devel
-# Not really used, only for win32 build
-#BuildRequires: glib2-devel
 
 Requires: gnupg2
-
-# Hasn't existed for a *long* time.
-#Obsoletes: cryptplug <= 0.3.16-2
 
 %description
 GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -37,6 +32,8 @@ Summary:  Development headers and libraries for %{name}
 Group:    Development/Libraries
 Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
+# /usr/share/aclocal ownership
+#Requires: automake
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
 %description devel
@@ -68,7 +65,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # unpackaged files
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 
 
@@ -111,6 +108,9 @@ fi
 
 
 %changelog
+* Sat Oct 18 2008 Rex Dieter <rdieter@fedoraproject.org> 1.1.7-1
+- gpgme-1.1.7
+
 * Sun Feb 17 2008 Rex Dieter <rdieter@fedoraproject.org> 1.1.6-3
 - --with-gpg=%%_bindir/gpg2 (#432445)
 - drop Requires: gnupg (#432445)
