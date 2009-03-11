@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.7
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -19,6 +19,9 @@ BuildRequires: gnupg2
 BuildRequires: libgpg-error-devel
 BuildRequires: pth-devel
 
+# --disable-gpg-test required since 'make check' currently includes some
+# gpg(1)-specific tests
+%define _with_gpg --with-gpg=%{_bindir}/gpg2 --disable-gpg-test
 Requires: gnupg2
 
 %description
@@ -53,7 +56,7 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' gpgme/gpgme-config.in
 %build
 %configure \
   --disable-static \
-  --with-gpg=%{_bindir}/gpg2 --disable-gpg-test
+  %{?_with_gpg}
 
 make %{?_smp_mflags}
 
@@ -92,11 +95,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 
-
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
-%{_libdir}/libgpgme*.so.*
+%{_libdir}/libgpgme.so.11*
+%{_libdir}/libgpgme-pth.so.11*
+%{_libdir}/libgpgme-pthread.so.11*
 
 %files devel
 %defattr(-,root,root,-)
@@ -108,6 +112,11 @@ fi
 
 
 %changelog
+* Wed Mar 11 2009 Rex Dieter <rdieter@fedoraproject.org> - 1.1.7-3
+- track shlib sonames closer, to highlight future abi/soname changes
+- _with_gpg macro, to potentially conditionalize gnupg vs gnupg2 defaults
+  for various os/releases (ie, fedora vs rhel)
+
 * Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
