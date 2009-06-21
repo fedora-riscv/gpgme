@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.7
-Release: 3%{?dist}
+Version: 1.1.8
+Release: 1%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -11,7 +11,7 @@ Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Patch1: gpgme-1.1.3-config_extras.patch
+Patch1: gpgme-1.1.8-config_extras.patch
 
 BuildRequires: gawk
 BuildRequires: gnupg
@@ -51,7 +51,7 @@ Requires(postun): /sbin/install-info
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
 # set it to a value which we know will be suppressed.
-sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' gpgme/gpgme-config.in
+sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 
 %build
 %configure \
@@ -75,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 %check 
 # expect 1(+?) errors with gnupg < 1.2.4
 # gpgme-1.1.6 includes one known failure (FAIL: t-sign)
-make -C tests check ||:
+make -C tests check 
 
 
 %clean
@@ -89,7 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 %post devel
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
 
-%postun devel
+%preun devel
 if [ $1 -eq 0 ] ; then
   /sbin/install-info --delete %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
 fi
@@ -112,6 +112,10 @@ fi
 
 
 %changelog
+* Sat Jun 20 2009 Rex Dieter <rdieter@fedoraproject.org> - 1.1.8-1
+- gpgme-1.1.8
+- -devel: s/postun/preun/ info scriptlet
+
 * Wed Mar 11 2009 Rex Dieter <rdieter@fedoraproject.org> - 1.1.7-3
 - track shlib sonames closer, to highlight future abi/soname changes
 - _with_gpg macro, to potentially conditionalize gnupg vs gnupg2 defaults
