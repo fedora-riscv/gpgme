@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -112,6 +112,9 @@ fi
 
 
 %changelog
+* Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.8-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Sat Jun 20 2009 Rex Dieter <rdieter@fedoraproject.org> - 1.1.8-1
 - gpgme-1.1.8
 - -devel: s/postun/preun/ info scriptlet
