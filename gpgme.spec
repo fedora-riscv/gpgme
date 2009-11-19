@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.8
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -14,8 +14,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Patch1: gpgme-1.1.8-config_extras.patch
 
 BuildRequires: gawk
-BuildRequires: gnupg
 BuildRequires: gnupg2
+BuildRequires: gnupg2-smime
 BuildRequires: libgpg-error-devel
 BuildRequires: pth-devel
 
@@ -112,6 +112,9 @@ fi
 
 
 %changelog
+* Thu Nov 19 2009 Tomas Mraz <tmraz@redhat.com> - 1.1.8-3
+- Add buildrequires gnupg2-smime for the gpgsm
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.8-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
