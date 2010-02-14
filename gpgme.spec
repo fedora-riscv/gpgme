@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.1.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -12,6 +12,9 @@ Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: gpgme-1.1.8-config_extras.patch
+
+# fix ImplicitDSOLinking in tests/, upstreamable
+Patch2:  gpgme-1.1.8-ImplicitDSOLinking.patch
 
 BuildRequires: gawk
 BuildRequires: gnupg2
@@ -47,6 +50,7 @@ Requires(postun): /sbin/install-info
 %setup -q
 
 %patch1 -p1 -b .config_extras
+%patch2 -p1 -b .ImplicitDSOLinking
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
@@ -112,6 +116,9 @@ fi
 
 
 %changelog
+* Sun Feb 14 2010 Rex Dieter <rdieter@fedoraproject.org> - 1.1.8-4
+- FTBFS gpgme-1.1.8-3.fc13: ImplicitDSOLinking (#564605)
+
 * Thu Nov 19 2009 Tomas Mraz <tmraz@redhat.com> - 1.1.8-3
 - Add buildrequires gnupg2-smime for the gpgsm
 
