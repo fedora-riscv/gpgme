@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.1.8
-Release: 4%{?dist}
+Version: 1.2.0
+Release: 1%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Patch1: gpgme-1.1.8-config_extras.patch
 
 # fix ImplicitDSOLinking in tests/, upstreamable
-Patch2:  gpgme-1.1.8-ImplicitDSOLinking.patch
+Patch2:  gpgme-1.2.0-ImplicitDSOLinking.patch
 
 BuildRequires: gawk
 BuildRequires: gnupg2
@@ -116,6 +116,9 @@ fi
 
 
 %changelog
+* Fri Jul 02 2010 Rex Dieter <rdieter@fedoraproject.org> - 1.2.0-1
+- gpgme-1.2.0 (#610984)
+
 * Sun Feb 14 2010 Rex Dieter <rdieter@fedoraproject.org> - 1.1.8-4
 - FTBFS gpgme-1.1.8-3.fc13: ImplicitDSOLinking (#564605)
 
