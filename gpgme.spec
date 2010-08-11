@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -15,6 +15,9 @@ Patch1: gpgme-1.1.8-config_extras.patch
 
 # fix ImplicitDSOLinking in tests/, upstreamable
 Patch2:  gpgme-1.2.0-ImplicitDSOLinking.patch
+
+# add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
+Patch3:  gpgme-1.2.0-largefile.patch
 
 BuildRequires: gawk
 BuildRequires: gnupg2
@@ -51,6 +54,7 @@ Requires(postun): /sbin/install-info
 
 %patch1 -p1 -b .config_extras
 %patch2 -p1 -b .ImplicitDSOLinking
+%patch3 -p1 -b .largefile
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
@@ -116,6 +120,9 @@ fi
 
 
 %changelog
+* Wed Aug 11 2010 Tomas Mraz <tmraz@redhat.com> - 1.2.0-2
+- add -D_FILE_OFFSET_BITS... to gpgme-config as appropriate (#621698)
+
 * Fri Jul 02 2010 Rex Dieter <rdieter@fedoraproject.org> - 1.2.0-1
 - gpgme-1.2.0 (#610984)
 
