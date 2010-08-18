@@ -5,7 +5,7 @@ diff -up gpgme-1.2.0/src/gpgme-config.in.largefile gpgme-1.2.0/src/gpgme-config.
  cflags_glib="@GLIB_CFLAGS@"
  with_glib=
  
-+if test "x@NEED__FILE_OFFSET_BITS@" != "x" ; then
++if test "0@NEED__FILE_OFFSET_BITS@" -gt "0" ; then
 +    cflags_lfs="-D_FILE_OFFSET_BITS=@NEED__FILE_OFFSET_BITS@"
 +fi
 +

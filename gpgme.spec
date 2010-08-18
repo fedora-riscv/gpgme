@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -120,6 +120,9 @@ fi
 
 
 %changelog
+* Wed Aug 18 2010 Tomas Mraz <tmraz@redhat.com> - 1.2.0-3
+- fix the condition for adding the -D_FILE_OFFSET_BITS...
+
 * Wed Aug 11 2010 Tomas Mraz <tmraz@redhat.com> - 1.2.0-2
 - add -D_FILE_OFFSET_BITS... to gpgme-config as appropriate (#621698)
 
