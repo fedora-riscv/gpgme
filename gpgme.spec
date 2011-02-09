@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.2.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -120,6 +120,9 @@ fi
 
 
 %changelog
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Wed Aug 18 2010 Tomas Mraz <tmraz@redhat.com> - 1.2.0-3
 - fix the condition for adding the -D_FILE_OFFSET_BITS...
 
