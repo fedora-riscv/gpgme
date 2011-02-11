@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.2.0
-Release: 4%{?dist}
+Version: 1.3.0
+Release: 1%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Patch1: gpgme-1.1.8-config_extras.patch
 
 # fix ImplicitDSOLinking in tests/, upstreamable
-Patch2:  gpgme-1.2.0-ImplicitDSOLinking.patch
+Patch2:  gpgme-1.3.0-ImplicitDSOLinking.patch
 
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
 Patch3:  gpgme-1.2.0-largefile.patch
@@ -24,6 +24,7 @@ BuildRequires: gnupg2
 BuildRequires: gnupg2-smime
 BuildRequires: libgpg-error-devel
 BuildRequires: pth-devel
+BuildRequires: libassuan-devel
 
 # --disable-gpg-test required since 'make check' currently includes some
 # gpg(1)-specific tests
@@ -120,6 +121,9 @@ fi
 
 
 %changelog
+* Fri Feb 11 2011 Tomas Mraz <tmraz@redhat.com> - 1.3.0-1
+- new upstream version
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
