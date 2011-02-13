@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -44,7 +44,7 @@ Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
-Requires: libassuan2-develk
+Requires: libassuan2-devel
 # /usr/share/aclocal ownership
 #Requires: automake
 Requires(post): /sbin/install-info
@@ -124,6 +124,9 @@ fi
 
 
 %changelog
+* Sun Feb 13 2011 Rex Dieter <rdieter@fedoraproject.org> - 1.3.0-3
+- -devel: fix typo (broken dep)
+
 * Sat Feb 12 2011 Rex Dieter <rdieter@fedoraproject.org> - 1.3.0-2
 - BR: libassuan2-devel
 - gpgme-config outputs -lassuan (#676954)
