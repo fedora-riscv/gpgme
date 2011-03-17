@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -11,7 +11,7 @@ Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Patch1: gpgme-1.1.8-config_extras.patch
+Patch1: gpgme-1.3.0-config_extras.patch
 
 # fix ImplicitDSOLinking in tests/, upstreamable
 Patch2:  gpgme-1.3.0-ImplicitDSOLinking.patch
@@ -44,7 +44,7 @@ Requires: %{name} = %{version}-%{release}
 Requires: libgpg-error-devel
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
-Requires: libassuan2-devel
+#Requires: libassuan2-devel
 # /usr/share/aclocal ownership
 #Requires: automake
 Requires(post): /sbin/install-info
@@ -124,6 +124,9 @@ fi
 
 
 %changelog
+* Thu Mar 17 2011 Rex Dieter <rdieter@fedoraproject.org> - 1.3.0-4
+- gpgme-config: remove libassuan-related flags as threatened (#676954) 
+\
 * Sun Feb 13 2011 Rex Dieter <rdieter@fedoraproject.org> - 1.3.0-3
 - -devel: fix typo (broken dep)
 
