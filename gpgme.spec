@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -124,6 +124,9 @@ fi
 
 
 %changelog
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Thu Mar 17 2011 Rex Dieter <rdieter@fedoraproject.org> - 1.3.0-4
 - gpgme-config: remove libassuan-related flags as threatened (#676954) 
 \
