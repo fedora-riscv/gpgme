@@ -31,6 +31,9 @@ BuildRequires: libassuan2-devel
 %define _with_gpg --with-gpg=%{_bindir}/gpg2 --disable-gpg-test
 Requires: gnupg2
 
+# On the following architectures workaround multiarch conflict of -devel packages:
+%define multilib_arches %{ix86} x86_64 ia64 ppc ppc64 s390 s390x %{sparc}
+
 %description
 GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
 easier for applications.  It provides a high-level crypto API for
@@ -83,6 +86,14 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 
+# Hack to resolve multiarch conflict (#341351)
+%ifarch %{multilib_arches}
+install $RPM_BUILD_ROOT%{_bindir}/gpgme-config{,.%{_target_cpu}}
+cat > $RPM_BUILD_ROOT%{_bindir}/gpgme-config <<__END__
+#!/bin/sh
+exec %{_bindir}/gpgme-config.\$(arch) \$@
+__END__
+%endif
 
 %check 
 # expect 1(+?) errors with gnupg < 1.2.4
@@ -117,6 +128,9 @@ fi
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/gpgme-config
+%ifarch %{multilib_arches}
+  %{_bindir}/gpgme-config.%{_target_cpu}
+%endif
 %{_includedir}/*
 %{_libdir}/libgpgme*.so
 %{_datadir}/aclocal/gpgme.m4
