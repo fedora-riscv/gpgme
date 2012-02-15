@@ -2,13 +2,15 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
+Source2: gpgme-new.h
+Source3: gpgme-new-warning.h
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: gpgme-1.3.0-config_extras.patch
@@ -93,6 +95,10 @@ cat > $RPM_BUILD_ROOT%{_bindir}/gpgme-config <<__END__
 #!/bin/sh
 exec %{_bindir}/gpgme-config.\$(arch) \$@
 __END__
+install -m644 %{SOURCE3} $RPM_BUILD_ROOT/%{_includedir}/gpgme-%{_target_cpu}.h
+cat $RPM_BUILD_ROOT/%{_includedir}/gpgme.h >> \
+  $RPM_BUILD_ROOT/%{_includedir}/gpgme-%{_target_cpu}.h
+install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/%{_prefix}/include/gpgme.h
 %endif
 
 %check 
@@ -138,6 +144,10 @@ fi
 
 
 %changelog
+* Wed Feb 15 2012 Simon Lukasik <slukasik@redhat.com> - 1.3.0-6
+- Resolve multilib conflict of gpgme-config (#341351)
+- Resolve multilib conflict of gpgme.h (#341351)
+
 * Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
