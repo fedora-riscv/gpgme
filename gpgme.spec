@@ -2,15 +2,14 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
-Source2: gpgme-new.h
-Source3: gpgme-new-warning.h
+Source2: gpgme-multilib.h
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: gpgme-1.3.0-config_extras.patch
@@ -45,7 +44,7 @@ management.
 %package devel
 Summary:  Development headers and libraries for %{name}
 Group:    Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libgpg-error-devel
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
@@ -90,20 +89,18 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 
 # Hack to resolve multiarch conflict (#341351)
 %ifarch %{multilib_arches}
-install $RPM_BUILD_ROOT%{_bindir}/gpgme-config{,.%{_target_cpu}}
+mv $RPM_BUILD_ROOT%{_bindir}/gpgme-config{,.%{_target_cpu}}
 cat > $RPM_BUILD_ROOT%{_bindir}/gpgme-config <<__END__
 #!/bin/sh
 exec %{_bindir}/gpgme-config.\$(arch) \$@
 __END__
-install -m644 %{SOURCE3} $RPM_BUILD_ROOT/%{_includedir}/gpgme-%{_target_cpu}.h
-cat $RPM_BUILD_ROOT/%{_includedir}/gpgme.h >> \
-  $RPM_BUILD_ROOT/%{_includedir}/gpgme-%{_target_cpu}.h
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/%{_prefix}/include/gpgme.h
+mv $RPM_BUILD_ROOT%{_includedir}/gpgme.h \
+   $RPM_BUILD_ROOT%{_includedir}/gpgme-%{__isa_bits}.h
+install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/gpgme.h
 %endif
 
+
 %check 
-# expect 1(+?) errors with gnupg < 1.2.4
-# gpgme-1.1.6 includes one known failure (FAIL: t-sign)
 make -C tests check 
 
 
@@ -112,8 +109,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post -p /sbin/ldconfig
-
 %postun -p /sbin/ldconfig
+
+%files
+%defattr(-,root,root,-)
+%doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
+%{_libdir}/libgpgme.so.11*
+%{_libdir}/libgpgme-pth.so.11*
+%{_libdir}/libgpgme-pthread.so.11*
 
 %post devel
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
@@ -123,27 +126,23 @@ if [ $1 -eq 0 ] ; then
   /sbin/install-info --delete %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
 fi
 
-
-%files
-%defattr(-,root,root,-)
-%doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
-%{_libdir}/libgpgme.so.11*
-%{_libdir}/libgpgme-pth.so.11*
-%{_libdir}/libgpgme-pthread.so.11*
-
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/gpgme-config
 %ifarch %{multilib_arches}
-  %{_bindir}/gpgme-config.%{_target_cpu}
+%{_bindir}/gpgme-config.%{_target_cpu}
+%{_includedir}/gpgme-%{__isa_bits}.h
 %endif
-%{_includedir}/*
+%{_includedir}/gpgme.h
 %{_libdir}/libgpgme*.so
 %{_datadir}/aclocal/gpgme.m4
 %{_infodir}/gpgme.info*
 
 
 %changelog
+* Sun Apr 22 2012 Rex Dieter <rdieter@fedoraproject.org> 1.3.0-7
+- gpgme.h: fatal error: gpgme-i386.h: No such file or directory compilation terminated (#815116)
+
 * Wed Feb 15 2012 Simon Lukasik <slukasik@redhat.com> - 1.3.0-6
 - Resolve multilib conflict of gpgme-config (#341351)
 - Resolve multilib conflict of gpgme.h (#341351)
