@@ -90,13 +90,14 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 # Hack to resolve multiarch conflict (#341351)
 %ifarch %{multilib_arches}
 mv $RPM_BUILD_ROOT%{_bindir}/gpgme-config{,.%{_target_cpu}}
-cat > $RPM_BUILD_ROOT%{_bindir}/gpgme-config <<__END__
+cat > gpgme-config-multilib.sh <<__END__
 #!/bin/sh
 exec %{_bindir}/gpgme-config.\$(arch) \$@
 __END__
+install -D -p gpgme-config-multilib.sh $RPM_BUILD_ROOT%{_bindir}/gpgme-config
 mv $RPM_BUILD_ROOT%{_includedir}/gpgme.h \
    $RPM_BUILD_ROOT%{_includedir}/gpgme-%{__isa_bits}.h
-install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/gpgme.h
+install -m644 -p -D %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/gpgme.h
 %endif
 
 
@@ -142,6 +143,7 @@ fi
 %changelog
 * Sun Apr 22 2012 Rex Dieter <rdieter@fedoraproject.org> 1.3.0-8
 - -devel: make Requires: libgpg-error-devel arch'd
+- ensure gpgme-config wrapper is executable
 
 * Sun Apr 22 2012 Rex Dieter <rdieter@fedoraproject.org> 1.3.0-7
 - gpgme.h: fatal error: gpgme-i386.h: No such file or directory compilation terminated (#815116)
