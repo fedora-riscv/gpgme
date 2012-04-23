@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -45,7 +45,7 @@ management.
 Summary:  Development headers and libraries for %{name}
 Group:    Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: libgpg-error-devel
+Requires: libgpg-error-devel%{?_isa}
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
 #Requires: libassuan2-devel
@@ -140,6 +140,9 @@ fi
 
 
 %changelog
+* Sun Apr 22 2012 Rex Dieter <rdieter@fedoraproject.org> 1.3.0-8
+- -devel: make Requires: libgpg-error-devel arch'd
+
 * Sun Apr 22 2012 Rex Dieter <rdieter@fedoraproject.org> 1.3.0-7
 - gpgme.h: fatal error: gpgme-i386.h: No such file or directory compilation terminated (#815116)
 
