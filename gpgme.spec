@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.0
-Release: 8%{?dist}
+Release: 9%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -141,6 +141,9 @@ fi
 
 
 %changelog
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Sun Apr 22 2012 Rex Dieter <rdieter@fedoraproject.org> 1.3.0-8
 - -devel: make Requires: libgpg-error-devel arch'd
 - ensure gpgme-config wrapper is executable
