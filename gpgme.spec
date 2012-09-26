@@ -1,8 +1,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.3.0
-Release: 9%{?dist}
+Version: 1.3.2
+Release: 1%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -12,13 +12,13 @@ Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 Source2: gpgme-multilib.h
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Patch1: gpgme-1.3.0-config_extras.patch
+Patch1: gpgme-1.3.2-config_extras.patch
 
 # fix ImplicitDSOLinking in tests/, upstreamable
-Patch2:  gpgme-1.3.0-ImplicitDSOLinking.patch
+Patch2:  gpgme-1.3.2-ImplicitDSOLinking.patch
 
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
-Patch3:  gpgme-1.2.0-largefile.patch
+Patch3:  gpgme-1.3.2-largefile.patch
 
 BuildRequires: gawk
 BuildRequires: gnupg2
@@ -27,9 +27,7 @@ BuildRequires: libgpg-error-devel
 BuildRequires: pth-devel
 BuildRequires: libassuan2-devel
 
-# --disable-gpg-test required since 'make check' currently includes some
-# gpg(1)-specific tests
-%define _with_gpg --with-gpg=%{_bindir}/gpg2 --disable-gpg-test
+%define _with_gpg --with-gpg=%{_bindir}/gpg2
 Requires: gnupg2
 
 # On the following architectures workaround multiarch conflict of -devel packages:
@@ -72,6 +70,7 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 %build
 %configure \
   --disable-static \
+  --without-g13 \
   %{?_with_gpg}
 
 make %{?_smp_mflags}
@@ -116,7 +115,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
 %{_libdir}/libgpgme.so.11*
-%{_libdir}/libgpgme-pth.so.11*
 %{_libdir}/libgpgme-pthread.so.11*
 
 %post devel
@@ -141,6 +139,12 @@ fi
 
 
 %changelog
+* Wed Sep 26 2012 Tomas Mraz <tmraz@redhat.com> - 1.3.2-1
+- new upstream version
+- re-enable gpg tests (original patch by John Morris <john@zultron.com>)
+- quiet configure warning 'could not find g13'
+- there is no libgpgme-pth anymore
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
