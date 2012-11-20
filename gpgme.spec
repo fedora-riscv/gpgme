@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -77,8 +77,6 @@ make %{?_smp_mflags}
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 make install DESTDIR=$RPM_BUILD_ROOT
 
 # unpackaged files
@@ -102,10 +100,6 @@ install -m644 -p -D %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/gpgme.h
 
 %check 
 make -C tests check 
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %post -p /sbin/ldconfig
@@ -139,6 +133,9 @@ fi
 
 
 %changelog
+* Tue Nov 20 2012 Frantisek Kluknavsky <fkluknav@redhat.com> - 1.3.2-2
+- minor spec cleanup
+
 * Wed Sep 26 2012 Tomas Mraz <tmraz@redhat.com> - 1.3.2-1
 - new upstream version
 - re-enable gpg tests (original patch by John Morris <john@zultron.com>)
