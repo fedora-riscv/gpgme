@@ -133,6 +133,9 @@ fi
 
 
 %changelog
+* Tue Jul 09 2013 Karsten Hopp <karsten@redhat.com> 1.3.2-3
+- rebuild to fix some f20 dependency issues on PPC
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
