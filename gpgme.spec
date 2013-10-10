@@ -1,31 +1,34 @@
 
+# trim changelog included in binary rpms
+%global _changelog_trimtime %(date +%s -d "1 year ago")
+
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.3.2
-Release: 4%{?dist}
+Version: 1.4.3
+Release: 1%{?dist}
 
 License: LGPLv2+
-Group:   Applications/System
 URL:     http://www.gnupg.org/related_software/gpgme/
 Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 Source2: gpgme-multilib.h
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Patch1: gpgme-1.3.2-config_extras.patch
 
-# fix ImplicitDSOLinking in tests/, upstreamable
-Patch2:  gpgme-1.3.2-ImplicitDSOLinking.patch
+# gpgsm t-verify check/test hangs if using gnupg2 < 2.0.22
+# see http://bugs.g10code.com/gnupg/issue1493
+Patch2: gpgme-1.4.3-no_gpgsm_t-verify.patch
 
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
 Patch3:  gpgme-1.3.2-largefile.patch
 
 BuildRequires: gawk
-BuildRequires: gnupg2
+# see patch2 above, else we only need 2.0.4
+BuildRequires: gnupg2 >= 2.0.22
 BuildRequires: gnupg2-smime
-BuildRequires: libgpg-error-devel
+BuildRequires: libgpg-error-devel >= 1.8
 BuildRequires: pth-devel
-BuildRequires: libassuan2-devel
+BuildRequires: libassuan-devel >= 2.0.2
 
 %define _with_gpg --with-gpg=%{_bindir}/gpg2
 Requires: gnupg2
@@ -41,14 +44,11 @@ management.
 
 %package devel
 Summary:  Development headers and libraries for %{name}
-Group:    Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libgpg-error-devel%{?_isa}
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
 #Requires: libassuan2-devel
-# /usr/share/aclocal ownership
-#Requires: automake
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
 %description devel
@@ -59,13 +59,14 @@ Requires(postun): /sbin/install-info
 %setup -q
 
 %patch1 -p1 -b .config_extras
-%patch2 -p1 -b .ImplicitDSOLinking
+#patch2 -p1 -b .no_gpgsm_t-verify
 %patch3 -p1 -b .largefile
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
 # set it to a value which we know will be suppressed.
 sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
+
 
 %build
 %configure \
@@ -80,9 +81,9 @@ make %{?_smp_mflags}
 make install DESTDIR=$RPM_BUILD_ROOT
 
 # unpackaged files
-rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
-rm -rf $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
+rm -fv $RPM_BUILD_ROOT%{_infodir}/dir
+rm -fv $RPM_BUILD_ROOT%{_libdir}/lib*.la
+rm -rfv $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
 
 # Hack to resolve multiarch conflict (#341351)
 %ifarch %{multilib_arches}
@@ -99,14 +100,13 @@ install -m644 -p -D %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/gpgme.h
 
 
 %check 
-make -C tests check 
+make check
 
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
 %{_libdir}/libgpgme.so.11*
 %{_libdir}/libgpgme-pthread.so.11*
@@ -120,7 +120,6 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %files devel
-%defattr(-,root,root,-)
 %{_bindir}/gpgme-config
 %ifarch %{multilib_arches}
 %{_bindir}/gpgme-config.%{_target_cpu}
@@ -133,6 +132,10 @@ fi
 
 
 %changelog
+* Wed Oct 09 2013 Rex Dieter <rdieter@fedoraproject.org> - 1.4.3-1
+- gpgme-1.4.3
+- cleanup .spec, trim changelog
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
