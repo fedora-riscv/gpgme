@@ -5,7 +5,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.4.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPLv2+
 URL:     http://www.gnupg.org/related_software/gpgme/
@@ -107,7 +107,9 @@ make check
 %postun -p /sbin/ldconfig
 
 %files
-%doc AUTHORS COPYING* ChangeLog NEWS README* THANKS TODO VERSION
+%{!?_licensedir:%global license %%doc}
+%license COPYING*
+%doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
 %{_libdir}/libgpgme.so.11*
 %{_libdir}/libgpgme-pthread.so.11*
 
@@ -132,6 +134,9 @@ fi
 
 
 %changelog
+* Sat Jul 12 2014 Tom Callaway <spot@fedoraproject.org> - 1.4.3-3
+- fix license handling
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
