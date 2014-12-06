@@ -2,7 +2,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.3.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPLv2+
 Group:   Applications/System
@@ -19,6 +19,8 @@ Patch2:  gpgme-1.3.2-ImplicitDSOLinking.patch
 
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
 Patch3:  gpgme-1.3.2-largefile.patch
+
+Patch4: gpgme-1.3.2-bufferoverflow.patch
 
 BuildRequires: gawk
 BuildRequires: gnupg2
@@ -61,6 +63,7 @@ Requires(postun): /sbin/install-info
 %patch1 -p1 -b .config_extras
 %patch2 -p1 -b .ImplicitDSOLinking
 %patch3 -p1 -b .largefile
+%patch4 -p1 -b .overflow
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
@@ -133,6 +136,9 @@ fi
 
 
 %changelog
+* Sat Dec 06 2014 Frantisek Kluknavsky <fkluknav@redhat.com> - 1.3.2-5
+- CVE-2014-3564, rhbz#1125170, gpgme-1.3.2-bufferoverflow.patch
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
