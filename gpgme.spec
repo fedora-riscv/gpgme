@@ -5,7 +5,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.4.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPLv2+
 URL:     http://www.gnupg.org/related_software/gpgme/
@@ -21,6 +21,8 @@ Patch2: gpgme-1.4.3-no_gpgsm_t-verify.patch
 
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
 Patch3:  gpgme-1.3.2-largefile.patch
+
+Patch4: gpgme-1.3.2-bufferoverflow.patch
 
 BuildRequires: gawk
 # see patch2 above, else we only need 2.0.4
@@ -61,6 +63,7 @@ Requires(postun): /sbin/install-info
 %patch1 -p1 -b .config_extras
 #patch2 -p1 -b .no_gpgsm_t-verify
 %patch3 -p1 -b .largefile
+%patch4 -p1 -b .overflow
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
@@ -134,6 +137,9 @@ fi
 
 
 %changelog
+* Sat Dec 06 2014 Frantisek Kluknavsky <fkluknav@redhat.com> - 1.4.3-5
+- CVE-2014-3564, rhbz#1125170, gpgme-1.3.2-bufferoverflow.patch
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
