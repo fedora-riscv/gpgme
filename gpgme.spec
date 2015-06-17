@@ -5,7 +5,7 @@
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
 Version: 1.4.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPLv2+
 URL:     http://www.gnupg.org/related_software/gpgme/
@@ -137,6 +137,9 @@ fi
 
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.3-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Sat Dec 06 2014 Frantisek Kluknavsky <fkluknav@redhat.com> - 1.4.3-5
 - CVE-2014-3564, rhbz#1125170, gpgme-1.3.2-bufferoverflow.patch
 
