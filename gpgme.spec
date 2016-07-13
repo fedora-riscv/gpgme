@@ -4,8 +4,8 @@
 
 Name:    gpgme
 Summary: GnuPG Made Easy - high level crypto API
-Version: 1.4.3
-Release: 7%{?dist}
+Version: 1.6.0
+Release: 1%{?dist}
 
 License: LGPLv2+
 URL:     http://www.gnupg.org/related_software/gpgme/
@@ -22,8 +22,7 @@ Patch2: gpgme-1.4.3-no_gpgsm_t-verify.patch
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
 Patch3:  gpgme-1.3.2-largefile.patch
 
-Patch4: gpgme-1.3.2-bufferoverflow.patch
-
+BuildRequires: gcc
 BuildRequires: gawk
 # see patch2 above, else we only need 2.0.4
 BuildRequires: gnupg2 >= 2.0.22
@@ -32,7 +31,9 @@ BuildRequires: libgpg-error-devel >= 1.8
 BuildRequires: pth-devel
 BuildRequires: libassuan-devel >= 2.0.2
 
-%define _with_gpg --with-gpg=%{_bindir}/gpg2
+# to remove RPATH
+BuildRequires: chrpath
+
 Requires: gnupg2
 
 # On the following architectures workaround multiarch conflict of -devel packages:
@@ -53,8 +54,9 @@ Requires: libgpg-error-devel%{?_isa}
 #Requires: libassuan2-devel
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
+
 %description devel
-%{summary}
+%{summary}.
 
 
 %prep
@@ -63,48 +65,42 @@ Requires(postun): /sbin/install-info
 %patch1 -p1 -b .config_extras
 #patch2 -p1 -b .no_gpgsm_t-verify
 %patch3 -p1 -b .largefile
-%patch4 -p1 -b .overflow
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
 # set it to a value which we know will be suppressed.
 sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 
+sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
 
 %build
-%configure \
-  --disable-static \
-  --without-g13 \
-  %{?_with_gpg}
-
-make %{?_smp_mflags}
-
+%configure --disable-static --disable-silent-rules --with-gpg=%{_bindir}/gpg2
+%make_build
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 
 # unpackaged files
-rm -fv $RPM_BUILD_ROOT%{_infodir}/dir
-rm -fv $RPM_BUILD_ROOT%{_libdir}/lib*.la
-rm -rfv $RPM_BUILD_ROOT%{_datadir}/common-lisp/source/gpgme/
+rm -fv %{buildroot}%{_infodir}/dir
+rm -fv %{buildroot}%{_libdir}/lib*.la
+rm -rfv %{buildroot}%{_datadir}/common-lisp/source/gpgme/
 
 # Hack to resolve multiarch conflict (#341351)
 %ifarch %{multilib_arches}
-mv $RPM_BUILD_ROOT%{_bindir}/gpgme-config{,.%{_target_cpu}}
+mv %{buildroot}%{_bindir}/gpgme-config{,.%{_target_cpu}}
 cat > gpgme-config-multilib.sh <<__END__
 #!/bin/sh
 exec %{_bindir}/gpgme-config.\$(arch) \$@
 __END__
-install -D -p gpgme-config-multilib.sh $RPM_BUILD_ROOT%{_bindir}/gpgme-config
-mv $RPM_BUILD_ROOT%{_includedir}/gpgme.h \
-   $RPM_BUILD_ROOT%{_includedir}/gpgme-%{__isa_bits}.h
-install -m644 -p -D %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/gpgme.h
+install -D -p gpgme-config-multilib.sh %{buildroot}%{_bindir}/gpgme-config
+mv %{buildroot}%{_includedir}/gpgme.h \
+   %{buildroot}%{_includedir}/gpgme-%{__isa_bits}.h
+install -m644 -p -D %{SOURCE2} %{buildroot}%{_includedir}/gpgme.h
 %endif
-
+chrpath -d %{buildroot}%{_bindir}/%{name}-tool
 
 %check 
 make check
-
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -113,8 +109,8 @@ make check
 %{!?_licensedir:%global license %%doc}
 %license COPYING*
 %doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
-%{_libdir}/libgpgme.so.11*
-%{_libdir}/libgpgme-pthread.so.11*
+%{_libdir}/lib%{name}.so.11*
+%{_libdir}/lib%{name}-pthread.so.11*
 
 %post devel
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
@@ -125,7 +121,8 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %files devel
-%{_bindir}/gpgme-config
+%{_bindir}/%{name}-config
+%{_bindir}/%{name}-tool
 %ifarch %{multilib_arches}
 %{_bindir}/gpgme-config.%{_target_cpu}
 %{_includedir}/gpgme-%{__isa_bits}.h
@@ -135,8 +132,10 @@ fi
 %{_datadir}/aclocal/gpgme.m4
 %{_infodir}/gpgme.info*
 
-
 %changelog
+* Wed Jul 13 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.6.0-1
+- Update to 1.6.0 (RHBZ #1167656)
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.3-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
