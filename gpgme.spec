@@ -28,7 +28,7 @@ BuildRequires:  gawk
 # see patch2 above, else we only need 2.0.4
 BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
 BuildRequires:  gnupg2-smime
-BuildRequires:  libgpg-error-devel >= 1.8
+BuildRequires:  libgpg-error-devel >= 1.23
 BuildRequires:  pth-devel
 BuildRequires:  libassuan-devel >= 2.0.2
 
