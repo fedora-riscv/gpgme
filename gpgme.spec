@@ -1,40 +1,41 @@
-
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
-Name:    gpgme
-Summary: GnuPG Made Easy - high level crypto API
-Version: 1.6.0
-Release: 1%{?dist}
+# STATUS_KEY_CONSIDERED from Patch101 has been added in 2.1.13
+%global gnupg2_min_ver 2.1.13
 
-License: LGPLv2+
-URL:     http://www.gnupg.org/related_software/gpgme/
-Source0: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
-Source1: ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
-Source2: gpgme-multilib.h
+Name:           gpgme
+Summary:        GnuPG Made Easy - high level crypto API
+Version:        1.6.0
+Release:        2%{?dist}
 
-Patch1: gpgme-1.3.2-config_extras.patch
+License:        LGPLv2+
+URL:            http://www.gnupg.org/related_software/gpgme/
+Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
+Source2:        gpgme-multilib.h
 
-# gpgsm t-verify check/test hangs if using gnupg2 < 2.0.22
-# see http://bugs.g10code.com/gnupg/issue1493
-Patch2: gpgme-1.4.3-no_gpgsm_t-verify.patch
+Patch1:         gpgme-1.3.2-config_extras.patch
 
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
-Patch3:  gpgme-1.3.2-largefile.patch
+Patch3:         gpgme-1.3.2-largefile.patch
 
-BuildRequires: gcc
-BuildRequires: gawk
+# https://bugzilla.redhat.com/show_bug.cgi?id=1359521
+# https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=315fb73d4a774e2c699ac1804f5377559b4d0027
+Patch101:       0001-Return-dedicated-error-code-for-all-subkeys-expired-.patch
+
+BuildRequires:  gcc
+BuildRequires:  gawk
 # see patch2 above, else we only need 2.0.4
-BuildRequires: gnupg2 >= 2.0.22
-BuildRequires: gnupg2-smime
-BuildRequires: libgpg-error-devel >= 1.8
-BuildRequires: pth-devel
-BuildRequires: libassuan-devel >= 2.0.2
+BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
+BuildRequires:  gnupg2-smime
+BuildRequires:  libgpg-error-devel >= 1.8
+BuildRequires:  pth-devel
+BuildRequires:  libassuan-devel >= 2.0.2
 
 # to remove RPATH
-BuildRequires: chrpath
+BuildRequires:  chrpath
 
-Requires: gnupg2
+Requires:       gnupg2 >= %{gnupg2_min_ver}
 
 # On the following architectures workaround multiarch conflict of -devel packages:
 %define multilib_arches %{ix86} x86_64 ia64 ppc ppc64 s390 s390x %{sparc}
@@ -60,11 +61,7 @@ Requires(postun): /sbin/install-info
 
 
 %prep
-%setup -q
-
-%patch1 -p1 -b .config_extras
-#patch2 -p1 -b .no_gpgsm_t-verify
-%patch3 -p1 -b .largefile
+%autosetup -p1
 
 ## HACK ALERT
 # The config script already suppresses the -L if it's /usr/lib, so cheat and
@@ -133,6 +130,9 @@ fi
 %{_infodir}/gpgme.info*
 
 %changelog
+* Mon Jul 25 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.6.0-2
+- Backport patch for STATUS_KEY_CONSIDERED (RHBZ #1359521)
+
 * Wed Jul 13 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.6.0-1
 - Update to 1.6.0 (RHBZ #1167656)
 
