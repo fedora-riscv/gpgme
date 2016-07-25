@@ -3,11 +3,13 @@
 
 # STATUS_KEY_CONSIDERED from Patch101 has been added in 2.1.13
 %global gnupg2_min_ver 2.1.13
+# GPG_ERR_SUBKEYS_EXP_OR_REV has been added in 1.23
+%global libgpg_error_min_ver 1.23
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.6.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 License:        LGPLv2+
 URL:            http://www.gnupg.org/related_software/gpgme/
@@ -28,7 +30,7 @@ BuildRequires:  gawk
 # see patch2 above, else we only need 2.0.4
 BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
 BuildRequires:  gnupg2-smime
-BuildRequires:  libgpg-error-devel >= 1.23
+BuildRequires:  libgpg-error-devel >= %{libgpg_error_min_ver}
 BuildRequires:  pth-devel
 BuildRequires:  libassuan-devel >= 2.0.2
 
@@ -49,7 +51,7 @@ management.
 %package devel
 Summary:  Development headers and libraries for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: libgpg-error-devel%{?_isa}
+Requires: libgpg-error-devel%{?_isa} >= %{libgpg_error_min_ver}
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
 #Requires: libassuan2-devel
@@ -130,6 +132,9 @@ fi
 %{_infodir}/gpgme.info*
 
 %changelog
+* Mon Jul 25 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.6.0-3
+- Set min ver for libgpg-error
+
 * Mon Jul 25 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.6.0-2
 - Backport patch for STATUS_KEY_CONSIDERED (RHBZ #1359521)
 
