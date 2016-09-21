@@ -1,29 +1,25 @@
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
-# STATUS_KEY_CONSIDERED from Patch101 has been added in 2.1.13
+# STATUS_KEY_CONSIDERED has been added in 2.1.13
 %global gnupg2_min_ver 2.1.13
 # GPG_ERR_SUBKEYS_EXP_OR_REV has been added in 1.23
 %global libgpg_error_min_ver 1.23
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.6.0
-Release:        3%{?dist}
+Version:        1.7.0
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            http://www.gnupg.org/related_software/gpgme/
 Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
-Patch1:         gpgme-1.3.2-config_extras.patch
-
+# Don't add extra libs/cflags in gpgme-config
+Patch0:         gpgme-1.7.0-confix_extras.patch
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
-Patch3:         gpgme-1.3.2-largefile.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1359521
-# https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=315fb73d4a774e2c699ac1804f5377559b4d0027
-Patch101:       0001-Return-dedicated-error-code-for-all-subkeys-expired-.patch
+Patch1:         gpgme-1.3.2-largefile.patch
 
 BuildRequires:  gcc
 BuildRequires:  gawk
@@ -33,6 +29,9 @@ BuildRequires:  gnupg2-smime
 BuildRequires:  libgpg-error-devel >= %{libgpg_error_min_ver}
 BuildRequires:  pth-devel
 BuildRequires:  libassuan-devel >= 2.0.2
+
+# For python bindings
+BuildRequires:  swig
 
 # to remove RPATH
 BuildRequires:  chrpath
@@ -61,6 +60,23 @@ Requires(postun): /sbin/install-info
 %description devel
 %{summary}.
 
+%package -n python2-%{name}
+Summary:        %{name} bindings for Python 2
+%{?python_provide:%python_provide python2-%{name}}
+BuildRequires:  python2-devel
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}}%{version}-%{release}
+
+%description -n python2-%{name}
+%{summary}.
+
+%package -n python3-%{name}
+Summary:        %{name} bindings for Python 3
+%{?python_provide:%python_provide python3-%{name}}
+BuildRequires:  python3-devel
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}}%{version}-%{release}
+
+%description -n python3-%{name}
+%{summary}.
 
 %prep
 %autosetup -p1
@@ -73,11 +89,23 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
 
 %build
-%configure --disable-static --disable-silent-rules --with-gpg=%{_bindir}/gpg2
+%configure --disable-static --disable-silent-rules --with-gpg=%{_bindir}/gpg2 --enable-languages=no
 %make_build
+
+# Build python bindings
+%global optflags %{optflags} -I%{_builddir}/%{?buildsubdir}
+pushd lang/python
+  %py2_build
+  %py3_build
+popd
 
 %install
 %make_install
+
+pushd lang/python
+  %py2_install
+  %py3_install
+popd
 
 # unpackaged files
 rm -fv %{buildroot}%{_infodir}/dir
@@ -105,7 +133,6 @@ make check
 %postun -p /sbin/ldconfig
 
 %files
-%{!?_licensedir:%global license %%doc}
 %license COPYING*
 %doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
 %{_libdir}/lib%{name}.so.11*
@@ -131,7 +158,18 @@ fi
 %{_datadir}/aclocal/gpgme.m4
 %{_infodir}/gpgme.info*
 
+%files -n python2-%{name}
+%{python2_sitearch}/pyme3-*.egg-info
+%{python2_sitearch}/pyme/
+
+%files -n python3-%{name}
+%{python3_sitearch}/pyme3-*.egg-info
+%{python3_sitearch}/pyme/
+
 %changelog
+* Wed Sep 21 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.7.0-1
+- Update to 1.7.0
+
 * Mon Jul 25 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.6.0-3
 - Set min ver for libgpg-error
 
