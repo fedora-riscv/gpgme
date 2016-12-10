@@ -90,8 +90,6 @@ sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
 
 %build
 %configure --disable-static --disable-silent-rules --enable-languages=python,python2,python3
-echo %license
-exit 1
 %make_build
 
 %install
