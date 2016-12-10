@@ -8,11 +8,11 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.7.0
+Version:        1.8.0
 Release:        1%{?dist}
 
 License:        LGPLv2+
-URL:            http://www.gnupg.org/related_software/gpgme/
+URL:            https://gnupg.org/related_software/gpgme/
 Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
@@ -49,7 +49,7 @@ management.
 
 %package devel
 Summary:  Development headers and libraries for %{name}
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires: libgpg-error-devel%{?_isa} >= %{libgpg_error_min_ver}
 # http://bugzilla.redhat.com/676954
 # TODO: see if -lassuan can be added to config_extras patch too -- Rex
@@ -89,23 +89,13 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
 
 %build
-%configure --disable-static --disable-silent-rules --with-gpg=%{_bindir}/gpg2 --enable-languages=no
+%configure --disable-static --disable-silent-rules --enable-languages=python,python2,python3
+echo %license
+exit 1
 %make_build
-
-# Build python bindings
-%global optflags %{optflags} -I%{_builddir}/%{?buildsubdir}
-pushd lang/python
-  %py2_build
-  %py3_build
-popd
 
 %install
 %make_install
-
-pushd lang/python
-  %py2_install
-  %py3_install
-popd
 
 # unpackaged files
 rm -fv %{buildroot}%{_infodir}/dir
@@ -126,6 +116,9 @@ install -m644 -p -D %{SOURCE2} %{buildroot}%{_includedir}/gpgme.h
 %endif
 chrpath -d %{buildroot}%{_bindir}/%{name}-tool
 
+# autofoo installs useless stuff for uninstall
+rm -vrf %{buildroot}{%{python2_sitelib},%{python3_sitelib}}
+
 %check 
 make check
 
@@ -136,7 +129,6 @@ make check
 %license COPYING*
 %doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
 %{_libdir}/lib%{name}.so.11*
-%{_libdir}/lib%{name}-pthread.so.11*
 
 %post devel
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
@@ -150,23 +142,27 @@ fi
 %{_bindir}/%{name}-config
 %{_bindir}/%{name}-tool
 %ifarch %{multilib_arches}
-%{_bindir}/gpgme-config.%{_target_cpu}
-%{_includedir}/gpgme-%{__isa_bits}.h
+%{_bindir}/%{name}-config.%{_target_cpu}
+%{_includedir}/%{name}-%{__isa_bits}.h
 %endif
-%{_includedir}/gpgme.h
-%{_libdir}/libgpgme*.so
-%{_datadir}/aclocal/gpgme.m4
-%{_infodir}/gpgme.info*
+%{_includedir}/%{name}.h
+%{_libdir}/lib%{name}.so
+%{_datadir}/aclocal/%{name}.m4
+%{_infodir}/%{name}.info*
 
 %files -n python2-%{name}
-%{python2_sitearch}/pyme3-*.egg-info
-%{python2_sitearch}/pyme/
+%{python2_sitearch}/gpg-*.egg-info
+%{python2_sitearch}/gpg/
 
 %files -n python3-%{name}
-%{python3_sitearch}/pyme3-*.egg-info
-%{python3_sitearch}/pyme/
+%doc lang/python/README lang/python/docs
+%{python3_sitearch}/gpg-*.egg-info
+%{python3_sitearch}/gpg/
 
 %changelog
+* Sat Dec 10 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-1
+- Update to 1.8.0
+
 * Wed Sep 21 2016 Igor Gnatenko <ignatenko@redhat.com> - 1.7.0-1
 - Update to 1.7.0
 
