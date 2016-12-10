@@ -22,6 +22,7 @@ Patch0:         gpgme-1.7.0-confix_extras.patch
 Patch1:         gpgme-1.3.2-largefile.patch
 
 BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  gawk
 # see patch2 above, else we only need 2.0.4
 BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
@@ -64,7 +65,7 @@ Requires(postun): /sbin/install-info
 Summary:        %{name} bindings for Python 2
 %{?python_provide:%python_provide python2-%{name}}
 BuildRequires:  python2-devel
-Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}}%{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n python2-%{name}
 %{summary}.
@@ -73,7 +74,7 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}}%{version}-%{release}
 Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-%{name}}
 BuildRequires:  python3-devel
-Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}}%{version}-%{release}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n python3-%{name}
 %{summary}.
@@ -86,7 +87,7 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}}%{version}-%{release}
 # set it to a value which we know will be suppressed.
 sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 
-sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
+find -type f -name Makefile\* -exec sed -i -e 's|GPG = gpg|GPG = gpg2|' {} ';'
 
 %build
 %configure --disable-static --disable-silent-rules --enable-languages=python
@@ -98,7 +99,6 @@ sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
 # unpackaged files
 rm -fv %{buildroot}%{_infodir}/dir
 rm -fv %{buildroot}%{_libdir}/lib*.la
-rm -rfv %{buildroot}%{_datadir}/common-lisp/source/gpgme/
 
 # Hack to resolve multiarch conflict (#341351)
 %ifarch %{multilib_arches}
@@ -115,7 +115,8 @@ install -m644 -p -D %{SOURCE2} %{buildroot}%{_includedir}/gpgme.h
 chrpath -d %{buildroot}%{_bindir}/%{name}-tool
 
 # autofoo installs useless stuff for uninstall
-rm -vrf %{buildroot}{%{python2_sitelib},%{python3_sitelib}}
+rm -vrf %{buildroot}%{python2_sitelib}
+rm -vrf %{buildroot}%{python3_sitelib}
 
 %check 
 make check
