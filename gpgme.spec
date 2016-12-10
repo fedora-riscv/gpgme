@@ -89,7 +89,7 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 sed -i -e 's|GPG = gpg|GPG = gpg2|' tests/gpg/Makefile.{in,am}
 
 %build
-%configure --disable-static --disable-silent-rules --enable-languages=python,python2,python3
+%configure --disable-static --disable-silent-rules --enable-languages=python
 %make_build
 
 %install
@@ -149,11 +149,12 @@ fi
 %{_infodir}/%{name}.info*
 
 %files -n python2-%{name}
+%doc lang/python/README
 %{python2_sitearch}/gpg-*.egg-info
 %{python2_sitearch}/gpg/
 
 %files -n python3-%{name}
-%doc lang/python/README lang/python/docs
+%doc lang/python/README
 %{python3_sitearch}/gpg-*.egg-info
 %{python3_sitearch}/gpg/
 
