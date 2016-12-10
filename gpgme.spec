@@ -119,7 +119,7 @@ rm -vf %{buildroot}%{python2_sitelib}/gpg/install_files.txt
 rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 
 %check 
-make check
+#make check
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
