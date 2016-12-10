@@ -9,7 +9,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -119,7 +119,7 @@ rm -vf %{buildroot}%{python2_sitelib}/gpg/install_files.txt
 rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 
 %check 
-#make check
+make check
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -160,6 +160,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sat Dec 10 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-2
+- Enable tests
+
 * Sat Dec 10 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-1
 - Update to 1.8.0
 
