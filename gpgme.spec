@@ -115,8 +115,8 @@ install -m644 -p -D %{SOURCE2} %{buildroot}%{_includedir}/gpgme.h
 chrpath -d %{buildroot}%{_bindir}/%{name}-tool
 
 # autofoo installs useless stuff for uninstall
-rm -vf %{buildroot}%{python2_sitelib}/gpg/installed_files.txt
-rm -vf %{buildroot}%{python3_sitelib}/gpg/installed_files.txt
+rm -vf %{buildroot}%{python2_sitelib}/gpg/install_files.txt
+rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 
 %check 
 make check
