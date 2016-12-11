@@ -9,7 +9,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -61,6 +61,42 @@ Requires(postun): /sbin/install-info
 %description devel
 %{summary}.
 
+%package pp
+Summary:        C++ bindings/wrapper for GPGME
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+
+%description pp
+%{summary}.
+
+%package pp-devel
+Summary:        Development libraries and header files for %{name}-pp
+Requires:       %{name}-pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+# For automatic provides
+BuildRequires:  cmake
+
+%description pp-devel
+%{summary}
+
+%package -n q%{name}
+Summary:        Qt API bindings/wrapper for GPGME
+Requires:       %{name}-pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Test)
+
+%description -n q%{name}
+%{summary}.
+
+%package -n q%{name}-devel
+Summary:        Development libraries and header files for %{name}
+Requires:       q%{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-pp-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+# For automatic provides
+BuildRequires:  cmake
+
+%description -n q%{name}-devel
+%{summary}.
+
 %package -n python2-%{name}
 Summary:        %{name} bindings for Python 2
 %{?python_provide:%python_provide python2-%{name}}
@@ -90,7 +126,7 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 find -type f -name Makefile\* -exec sed -i -e 's|GPG = gpg|GPG = gpg2|' {} ';'
 
 %build
-%configure --disable-static --disable-silent-rules --enable-languages=python
+%configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
 %install
@@ -113,6 +149,8 @@ mv %{buildroot}%{_includedir}/gpgme.h \
 install -m644 -p -D %{SOURCE2} %{buildroot}%{_includedir}/gpgme.h
 %endif
 chrpath -d %{buildroot}%{_bindir}/%{name}-tool
+chrpath -d %{buildroot}%{_libdir}/lib%{name}pp.so*
+chrpath -d %{buildroot}%{_libdir}/libq%{name}.so*
 
 # autofoo installs useless stuff for uninstall
 rm -vf %{buildroot}%{python2_sitelib}/gpg/install_files.txt
@@ -149,6 +187,27 @@ fi
 %{_datadir}/aclocal/%{name}.m4
 %{_infodir}/%{name}.info*
 
+%files pp
+%doc lang/cpp/README
+%{_libdir}/lib%{name}pp.so.*
+
+%files pp-devel
+%{_includedir}/%{name}++/
+%{_libdir}/lib%{name}pp.so
+%dir %{_libdir}/cmake/
+%{_libdir}/cmake/Gpgmepp/
+
+%files -n q%{name}
+%doc lang/qt/README
+%{_libdir}/libq%{name}.so.*
+
+%files -n q%{name}-devel
+%{_includedir}/q%{name}/
+%{_includedir}/QGpgME/
+%{_libdir}/libq%{name}.so
+%dir %{_libdir}/cmake/
+%{_libdir}/cmake/QGpgme/
+
 %files -n python2-%{name}
 %doc lang/python/README
 %{python2_sitearch}/gpg-*.egg-info
@@ -160,6 +219,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sun Dec 11 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-3
+- Add Qt and C++ subpackages
+
 * Sat Dec 10 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-2
 - Enable tests
 
