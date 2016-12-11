@@ -1,3 +1,5 @@
+%bcond_with tests
+
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
@@ -156,8 +158,10 @@ chrpath -d %{buildroot}%{_libdir}/libq%{name}.so*
 rm -vf %{buildroot}%{python2_sitelib}/gpg/install_files.txt
 rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 
+%if ! %{with tests}
 %check 
 make check
+%endif
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
