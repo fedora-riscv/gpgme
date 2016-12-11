@@ -9,7 +9,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -97,18 +97,18 @@ BuildRequires:  cmake
 %description -n q%{name}-devel
 %{summary}.
 
-%package -n python2-%{name}
+%package -n python2-gpg
 Summary:        %{name} bindings for Python 2
-%{?python_provide:%python_provide python2-%{name}}
+%{?python_provide:%python_provide python2-gpg}
 BuildRequires:  python2-devel
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n python2-%{name}
 %{summary}.
 
-%package -n python3-%{name}
+%package -n python3-gpg
 Summary:        %{name} bindings for Python 3
-%{?python_provide:%python_provide python3-%{name}}
+%{?python_provide:%python_provide python3-gpg}
 BuildRequires:  python3-devel
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
@@ -208,17 +208,20 @@ fi
 %dir %{_libdir}/cmake/
 %{_libdir}/cmake/QGpgme/
 
-%files -n python2-%{name}
+%files -n python2-gpg
 %doc lang/python/README
 %{python2_sitearch}/gpg-*.egg-info
 %{python2_sitearch}/gpg/
 
-%files -n python3-%{name}
+%files -n python3-gpg
 %doc lang/python/README
 %{python3_sitearch}/gpg-*.egg-info
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sun Dec 11 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-4
+- Rename pythonX-gpgme into pythonX-gpg
+
 * Sun Dec 11 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-3
 - Add Qt and C++ subpackages
 
