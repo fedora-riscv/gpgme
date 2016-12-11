@@ -105,7 +105,7 @@ Summary:        %{name} bindings for Python 2
 BuildRequires:  python2-devel
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
-%description -n python2-%{name}
+%description -n python2-gpg
 %{summary}.
 
 %package -n python3-gpg
@@ -114,7 +114,7 @@ Summary:        %{name} bindings for Python 3
 BuildRequires:  python3-devel
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
-%description -n python3-%{name}
+%description -n python3-gpg
 %{summary}.
 
 %prep
