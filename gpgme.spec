@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -223,6 +223,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Thu Dec 22 2016 Miro Hrončok <mhroncok@redhat.com> - 1.8.0-5
+- Rebuild for Python 3.6
+
 * Sun Dec 11 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 1.8.0-4
 - Rename pythonX-gpgme into pythonX-gpg
 
