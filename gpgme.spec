@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -65,26 +65,32 @@ Requires(postun): /sbin/install-info
 %description devel
 %{summary}.
 
-%package pp
+%package -n %{name}pp
 Summary:        C++ bindings/wrapper for GPGME
+Obsoletes:      gpgme-pp < 1.8.0-7
+Provides:       gpgme-pp = %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       gpgme-pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
-%description pp
+%description -n %{name}pp
 %{summary}.
 
-%package pp-devel
+%package -n %{name}pp-devel
 Summary:        Development libraries and header files for %{name}-pp
-Requires:       %{name}-pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-Requires:       %{name}-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      gpgme-pp-devel < 1.8.0-7
+Provides:       gpgme-pp-devel = %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:       gpgme-pp-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-devel%{?_isa}
 # For automatic provides
 BuildRequires:  cmake
 
-%description pp-devel
+%description -n %{name}pp-devel
 %{summary}
 
 %package -n q%{name}
 Summary:        Qt API bindings/wrapper for GPGME
-Requires:       %{name}-pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Test)
 
@@ -94,7 +100,7 @@ BuildRequires:  pkgconfig(Qt5Test)
 %package -n q%{name}-devel
 Summary:        Development libraries and header files for %{name}
 Requires:       q%{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-Requires:       %{name}-pp-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}pp-devel%{?_isa}
 # For automatic provides
 BuildRequires:  cmake
 
@@ -193,11 +199,11 @@ fi
 %{_datadir}/aclocal/%{name}.m4
 %{_infodir}/%{name}.info*
 
-%files pp
+%files -n %{name}pp
 %doc lang/cpp/README
 %{_libdir}/lib%{name}pp.so.*
 
-%files pp-devel
+%files -n %{name}pp-devel
 %{_includedir}/%{name}++/
 %{_libdir}/lib%{name}pp.so
 %dir %{_libdir}/cmake/
@@ -225,6 +231,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sun Jan 01 2017 Rex Dieter <rdieter@math.unl.edu> - 1.8.0-7
+- rename gpgme-pp to gpgmepp, simplify -devel deps
+
 * Sun Jan 01 2017 Rex Dieter <rdieter@math.unl.edu> - 1.8.0-6
 - backport upstream cmake-related fix
 
