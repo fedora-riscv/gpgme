@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -22,6 +22,8 @@ Source2:        gpgme-multilib.h
 Patch0:         gpgme-1.7.0-confix_extras.patch
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
 Patch1:         gpgme-1.3.2-largefile.patch
+# upstream fix for cmake file(s)
+Patch2:         0002-Remove-a-forgotten-instance-of-libsuffix.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -223,6 +225,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sun Jan 01 2017 Rex Dieter <rdieter@math.unl.edu> - 1.8.0-6
+- backport upstream cmake-related fix
+
 * Thu Dec 22 2016 Miro Hrončok <mhroncok@redhat.com> - 1.8.0-5
 - Rebuild for Python 3.6
 
