@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -99,6 +99,8 @@ BuildRequires:  pkgconfig(Qt5Test)
 
 %package -n q%{name}-devel
 Summary:        Development libraries and header files for %{name}
+# before libqgpgme.so symlink was moved to avoid conflict
+Conflicts:      kdepimlibs-devel < 4.14.10-17
 Requires:       q%{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       %{name}pp-devel%{?_isa}
 # For automatic provides
@@ -231,6 +233,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Mon Jan 16 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.8.0-8
+- qgpgme-devel: Conflicts: kdepimlibs-devel < 4.14.10-17
+
 * Sun Jan 01 2017 Rex Dieter <rdieter@math.unl.edu> - 1.8.0-7
 - rename gpgme-pp to gpgmepp, simplify -devel deps
 
