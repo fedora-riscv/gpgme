@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -82,6 +82,8 @@ Provides:       gpgme-pp-devel = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       gpgme-pp-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       %{name}pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       %{name}-devel%{?_isa}
+#Gpgmepp/GpgmeppConfig.cmake:  INTERFACE_LINK_LIBRARIES "pthread;/usr/lib64/libgpgme.so;-lassuan -lgpg-error"
+Requires:       libassuan-devel%{?_isa}
 # For automatic provides
 BuildRequires:  cmake
 
@@ -233,6 +235,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Wed Jan 18 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.8.0-9
+- gpgmepp-devel: Requires: libassuan-devel
+
 * Mon Jan 16 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.8.0-8
 - qgpgme-devel: Conflicts: kdepimlibs-devel < 4.14.10-17
 
