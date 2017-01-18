@@ -11,19 +11,24 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
 Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
-# Don't add extra libs/cflags in gpgme-config
-Patch0:         gpgme-1.7.0-confix_extras.patch
-# add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
-Patch1:         gpgme-1.3.2-largefile.patch
+## upstream patches
 # upstream fix for cmake file(s)
 Patch2:         0002-Remove-a-forgotten-instance-of-libsuffix.patch
+
+## downstream patches
+# Don't add extra libs/cflags in gpgme-config
+Patch10:        gpgme-1.7.0-confix_extras.patch
+# add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
+Patch11:        gpgme-1.3.2-largefile.patch
+# cmake equivalent of confix_extras.patch
+Patch13:        gpgme-1.8.0-cmake_extras.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -56,9 +61,6 @@ management.
 Summary:  Development headers and libraries for %{name}
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires: libgpg-error-devel%{?_isa} >= %{libgpg_error_min_ver}
-# http://bugzilla.redhat.com/676954
-# TODO: see if -lassuan can be added to config_extras patch too -- Rex
-#Requires: libassuan2-devel
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
 
@@ -82,8 +84,6 @@ Provides:       gpgme-pp-devel = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       gpgme-pp-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       %{name}pp%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       %{name}-devel%{?_isa}
-#Gpgmepp/GpgmeppConfig.cmake:  INTERFACE_LINK_LIBRARIES "pthread;/usr/lib64/libgpgme.so;-lassuan -lgpg-error"
-Requires:       libassuan-devel%{?_isa}
 # For automatic provides
 BuildRequires:  cmake
 
@@ -235,6 +235,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Wed Jan 18 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.8.0-10
+- patch out LIBASSUAN_LIBRARIES in cmake too
+
 * Wed Jan 18 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.8.0-9
 - gpgmepp-devel: Requires: libassuan-devel
 
