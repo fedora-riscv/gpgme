@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        10%{?dist}
+Release:        11%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -235,6 +235,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.0-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Wed Jan 18 2017 Rex Dieter <rdieter@fedoraproject.org> - 1.8.0-10
 - patch out LIBASSUAN_LIBRARIES in cmake too
 
