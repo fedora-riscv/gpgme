@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.8.0
-Release:        11%{?dist}
+Release:        12%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -19,6 +19,9 @@ Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
 ## upstream patches
+# https://bugs.gnupg.org/gnupg/issue2955
+# https://bugzilla.redhat.com/show_bug.cgi?id=1417383
+Patch1:         0001-add-missing-include-functional.patch
 # upstream fix for cmake file(s)
 Patch2:         0002-Remove-a-forgotten-instance-of-libsuffix.patch
 
@@ -235,6 +238,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sat Feb 11 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.8.0-12
+- Fix FTBFS
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.8.0-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
