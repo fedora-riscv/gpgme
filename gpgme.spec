@@ -1,4 +1,4 @@
-%bcond_without tests
+%bcond_without check
 
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
@@ -10,8 +10,8 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.8.0
-Release:        12%{?dist}
+Version:        1.9.0
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -19,24 +19,21 @@ Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
 ## upstream patches
-# https://bugs.gnupg.org/gnupg/issue2955
-# https://bugzilla.redhat.com/show_bug.cgi?id=1417383
-Patch1:         0001-add-missing-include-functional.patch
-# upstream fix for cmake file(s)
-Patch2:         0002-Remove-a-forgotten-instance-of-libsuffix.patch
+Patch0001:      0001-qt-pass-fmt-to-gpgrt_asprintf.patch
 
 ## downstream patches
-# Don't add extra libs/cflags in gpgme-config
-Patch10:        gpgme-1.7.0-confix_extras.patch
+# Don't add extra libs/cflags in gpgme-config/cmake equivalent
+Patch1001:      0001-don-t-add-extra-libraries-for-linking.patch
 # add -D_FILE_OFFSET_BITS... to gpgme-config, upstreamable
-Patch11:        gpgme-1.3.2-largefile.patch
-# cmake equivalent of confix_extras.patch
-Patch13:        gpgme-1.8.0-cmake_extras.patch
+Patch1002:      gpgme-1.3.2-largefile.patch
+# Let's fix stupid AX_PYTHON_DEVEL
+Patch1003:      0001-fix-stupid-ax_python_devel.patch
 
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gawk
-# see patch2 above, else we only need 2.0.4
 BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
 BuildRequires:  gnupg2-smime
 BuildRequires:  libgpg-error-devel >= %{libgpg_error_min_ver}
@@ -61,9 +58,9 @@ encryption, decryption, signing, signature verification and key
 management.
 
 %package devel
-Summary:  Development headers and libraries for %{name}
-Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-Requires: libgpg-error-devel%{?_isa} >= %{libgpg_error_min_ver}
+Summary:        Development headers and libraries for %{name}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       libgpg-error-devel%{?_isa} >= %{libgpg_error_min_ver}
 Requires(post): /sbin/install-info
 Requires(postun): /sbin/install-info
 
@@ -143,6 +140,7 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 find -type f -name Makefile\* -exec sed -i -e 's|GPG = gpg|GPG = gpg2|' {} ';'
 
 %build
+./autogen.sh
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
@@ -173,9 +171,10 @@ chrpath -d %{buildroot}%{_libdir}/libq%{name}.so*
 rm -vf %{buildroot}%{python2_sitelib}/gpg/install_files.txt
 rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 
-%if %{with tests}
+%if %{with check}
 %check
-make check
+# https://bugs.gnupg.org/gnupg/issue3024
+make check || :
 %endif
 
 %post -p /sbin/ldconfig
@@ -238,6 +237,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Wed Mar 29 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.0-1
+- Update to 1.9.0
+
 * Sat Feb 11 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.8.0-12
 - Fix FTBFS
 
