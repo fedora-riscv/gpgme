@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.9.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -45,6 +45,9 @@ BuildRequires:  swig
 
 # to remove RPATH
 BuildRequires:  chrpath
+
+# For AutoReq cmake-filesystem
+BuildRequires:  cmake
 
 Requires:       gnupg2 >= %{gnupg2_min_ver}
 
@@ -212,7 +215,6 @@ fi
 %files -n %{name}pp-devel
 %{_includedir}/%{name}++/
 %{_libdir}/lib%{name}pp.so
-%dir %{_libdir}/cmake/
 %{_libdir}/cmake/Gpgmepp/
 
 %files -n q%{name}
@@ -223,7 +225,6 @@ fi
 %{_includedir}/q%{name}/
 %{_includedir}/QGpgME/
 %{_libdir}/libq%{name}.so
-%dir %{_libdir}/cmake/
 %{_libdir}/cmake/QGpgme/
 
 %files -n python2-gpg
@@ -237,6 +238,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Mon Aug 07 2017 Björn Esser <besser82@fedoraproject.org> - 1.9.0-4
+- Rebuilt for AutoReq cmake-filesystem
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
