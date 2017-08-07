@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.9.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -37,7 +37,6 @@ BuildRequires:  gawk
 BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
 BuildRequires:  gnupg2-smime
 BuildRequires:  libgpg-error-devel >= %{libgpg_error_min_ver}
-BuildRequires:  pth-devel
 BuildRequires:  libassuan-devel >= 2.0.2
 
 # For python bindings
@@ -238,6 +237,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Mon Aug 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.0-5
+- Remove BuildRequires: pth-devel, it is not needed for long time
+
 * Mon Aug 07 2017 Björn Esser <besser82@fedoraproject.org> - 1.9.0-4
 - Rebuilt for AutoReq cmake-filesystem
 
