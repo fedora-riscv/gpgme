@@ -1,0 +1,21 @@
+diff -U3 -r gpgme-1.9.0-orig/m4/python.m4 gpgme-1.9.0/m4/python.m4
+--- gpgme-1.9.0-orig/m4/python.m4	2017-03-24 15:20:32.000000000 +0100
++++ gpgme-1.9.0/m4/python.m4	2017-08-10 14:20:58.041841020 +0200
+@@ -32,15 +32,13 @@
+ # cause an error if the version of python installed on the system
+ # doesn't meet the requirement.  MINIMUM-VERSION should consist of
+ # numbers and dots only.
++
+ AC_DEFUN([AM_PATH_PYTHON],
+  [
+   dnl Find a Python interpreter.  Python versions prior to 2.0 are not
+   dnl supported. (2.0 was released on October 16, 2000).
+   m4_define_default([_AM_PYTHON_INTERPRETER_LIST],
+-[python2 python2.7 dnl
+- python dnl
+- python3 python3.0 python3.1 python3.2 python3.3  dnl
+- python3.4 python3.5 python3.6 python3.7 python3.8])
++[platform-python])
+ 
+   AC_ARG_VAR([PYTHON], [the Python interpreter])
+ 
