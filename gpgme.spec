@@ -127,6 +127,7 @@ Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-gpg}
 BuildRequires:  python3-devel
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:      platform-python-gpg < 1.9.0-7
 
 %description -n python3-gpg
 %{summary}.
