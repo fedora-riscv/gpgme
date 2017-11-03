@@ -1,9 +1,4 @@
-%bcond_without python2
-%bcond_without python3
-%bcond_without platform_python
 %bcond_without check
-
-%global platform_py_dir %{_builddir}/platpy-%{name}-%{version}-%{release}
 
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
@@ -16,13 +11,12 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.9.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
 Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
-Source3:        platform-python.patch
 
 ## upstream patches
 Patch0001:      0001-qt-pass-fmt-to-gpgrt_asprintf.patch
@@ -119,7 +113,6 @@ BuildRequires:  cmake
 %description -n q%{name}-devel
 %{summary}.
 
-%if %{with python2}
 %package -n python2-gpg
 Summary:        %{name} bindings for Python 2
 %{?python_provide:%python_provide python2-gpg}
@@ -128,9 +121,7 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n python2-gpg
 %{summary}.
-%endif
 
-%if %{with python3}
 %package -n python3-gpg
 Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-gpg}
@@ -139,17 +130,6 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description -n python3-gpg
 %{summary}.
-%endif
-
-%if %{with platform_python}
-%package -n platform-python-gpg
-Summary:        %{name} bindings for Platform Python
-BuildRequires:  platform-python-devel
-Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%description -n platform-python-gpg
-%{summary}.
-%endif
 
 %prep
 %autosetup -p1
@@ -162,35 +142,11 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 find -type f -name Makefile\* -exec sed -i -e 's|GPG = gpg|GPG = gpg2|' {} ';'
 
 %build
-
-%if %{with platform_python}
-rm -rf %{platform_py_dir}
-cp -a . %{platform_py_dir}
-pushd %platform_py_dir
-patch -p1 < %SOURCE3
-./autogen.sh
-(
-    export PYTHON=platform-python
-    export PATH=$PATH:%{_libexecdir}
-    %configure --disable-static --disable-silent-rules --enable-languages=python3
-)
-%make_build
-popd
-%endif
-
 ./autogen.sh
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
 %install
-
-%if %{with platform_python}
-pushd %platform_py_dir
-%make_install
-popd
-rm -vf %{buildroot}%{platform_python_sitelib}/gpg/install_files.txt
-%endif
-
 %make_install
 
 # unpackaged files
@@ -219,13 +175,6 @@ rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 
 %if %{with check}
 %check
-
-%if %{with platform_python}
-pushd %platform_py_dir
-make check
-popd
-%endif
-
 make check
 %endif
 
@@ -276,29 +225,20 @@ fi
 %{_libdir}/libq%{name}.so
 %{_libdir}/cmake/QGpgme/
 
-%if %{with python2}
 %files -n python2-gpg
 %doc lang/python/README
 %{python2_sitearch}/gpg-*.egg-info
 %{python2_sitearch}/gpg/
-%endif
 
-%if %{with python3}
 %files -n python3-gpg
 %doc lang/python/README
 %{python3_sitearch}/gpg-*.egg-info
 %{python3_sitearch}/gpg/
-%endif
-
-%if %{with platform_python}
-%files -n platform-python-gpg
-%doc lang/python/README
-%{platform_python_sitearch}/gpg-*.egg-info
-%{platform_python_sitearch}/gpg/
-%endif
-
 
 %changelog
+* Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.0-7
+- Remove platform-python subpackages
+
 * Thu Aug 10 2017 Petr Viktorin <pviktori@redhat.com> - 1.9.0-6
 - Add subpackage for platform-python (https://fedoraproject.org/wiki/Changes/Platform_Python_Stack)
 
