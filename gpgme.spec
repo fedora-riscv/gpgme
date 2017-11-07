@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.9.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -127,7 +127,7 @@ Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-gpg}
 BuildRequires:  python3-devel
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-Obsoletes:      platform-python-gpg < 1.9.0-7
+Obsoletes:      platform-python-gpg < %{version}-%{release}
 
 %description -n python3-gpg
 %{summary}.
@@ -237,6 +237,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Tue Nov 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.0-8
+- Use better Obsoletes for platform-python
+
 * Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.0-7
 - Remove platform-python subpackages
 
