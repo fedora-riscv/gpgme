@@ -10,8 +10,8 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.9.0
-Release:        8%{?dist}
+Version:        1.10.0
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -19,7 +19,6 @@ Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
 ## upstream patches
-Patch0001:      0001-qt-pass-fmt-to-gpgrt_asprintf.patch
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
@@ -237,6 +236,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Wed Dec 13 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.10.0-1
+- Update to 1.10.0
+
 * Tue Nov 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.9.0-8
 - Use better Obsoletes for platform-python
 

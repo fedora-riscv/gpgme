@@ -10,3 +10,4 @@
 # ignore emacs cruft
 /.#*
 /#*
+/gpgme-1.10.0.tar.bz2
