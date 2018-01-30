@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.10.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -178,8 +178,7 @@ rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 make check
 %endif
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 %files
 %license COPYING*
@@ -236,6 +235,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Tue Jan 30 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.10.0-2
+- Switch to %%ldconfig_scriptlets
+
 * Wed Dec 13 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.10.0-1
 - Update to 1.10.0
 
