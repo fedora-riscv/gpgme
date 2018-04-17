@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.10.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -19,6 +19,8 @@ Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
 ## upstream patches
+# https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=b99502274ae5efdf6df0d967900ec3d1e64373d7
+Patch1000:      0001-core-Tweak-STATUS_FAILURE-handling.patch
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
@@ -235,6 +237,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Tue Apr 17 2018 Jonathan Lebon <jonathan@jlebon.com> - 1.10.0-4
+- Backport patch to tweak STATUS_FAILURE handling
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.10.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
