@@ -5,13 +5,12 @@
 
 # STATUS_KEY_CONSIDERED has been added in 2.1.13
 %global gnupg2_min_ver 2.1.13
-# GPG_ERR_SUBKEYS_EXP_OR_REV has been added in 1.23
-%global libgpg_error_min_ver 1.23
+%global libgpg_error_min_ver 1.24
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.10.0
-Release:        4%{?dist}
+Version:        1.11.0
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -19,8 +18,6 @@ Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
 ## upstream patches
-# https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=b99502274ae5efdf6df0d967900ec3d1e64373d7
-Patch1000:      0001-core-Tweak-STATUS_FAILURE-handling.patch
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
@@ -38,7 +35,7 @@ BuildRequires:  gawk
 BuildRequires:  gnupg2 >= %{gnupg2_min_ver}
 BuildRequires:  gnupg2-smime
 BuildRequires:  libgpg-error-devel >= %{libgpg_error_min_ver}
-BuildRequires:  libassuan-devel >= 2.0.2
+BuildRequires:  libassuan-devel >= 2.4.2
 
 # For python bindings
 BuildRequires:  swig
@@ -237,6 +234,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Thu Apr 19 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.11.0-1
+- Update to 1.11.0
+
 * Tue Apr 17 2018 Jonathan Lebon <jonathan@jlebon.com> - 1.10.0-4
 - Backport patch to tweak STATUS_FAILURE handling
 
