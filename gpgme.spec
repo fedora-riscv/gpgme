@@ -183,6 +183,7 @@ make check || :
 %files
 %license COPYING*
 %doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
+%{_bindir}/%{name}-json
 %{_libdir}/lib%{name}.so.11*
 
 %post devel
