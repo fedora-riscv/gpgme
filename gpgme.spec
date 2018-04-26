@@ -11,7 +11,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.10.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -237,6 +237,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Thu Apr 26 2018 Colin Walters <walters@verbum.org> - 1.10.0-5
+- Bump version for upgrade path
+
 * Tue Apr 17 2018 Jonathan Lebon <jonathan@jlebon.com> - 1.10.0-4
 - Backport patch to tweak STATUS_FAILURE handling
 
