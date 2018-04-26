@@ -16,7 +16,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.10.0
-Release:        4%{?dist}.1
+Release:        5%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -299,7 +299,7 @@ fi
 
 
 %changelog
-* Thu Apr 26 2018 Todd Zullinger <tmz@pobox.com> - 1.10.0-4.1
+* Thu Apr 26 2018 Todd Zullinger <tmz@pobox.com> - 1.10.0-5
 - Restore platform-python subpackages
 
 * Tue Apr 17 2018 Jonathan Lebon <jonathan@jlebon.com> - 1.10.0-4
