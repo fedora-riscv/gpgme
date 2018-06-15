@@ -10,7 +10,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.11.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -235,6 +235,9 @@ fi
 %{python3_sitearch}/gpg/
 
 %changelog
+* Fri Jun 15 2018 Miro Hrončok <mhroncok@redhat.com> - 1.11.1-2
+- Rebuilt for Python 3.7
+
 * Fri Apr 20 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.11.1-1
 - Update to 1.11.1
 
