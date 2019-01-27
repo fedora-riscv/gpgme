@@ -61,8 +61,6 @@ management.
 Summary:        Development headers and libraries for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       libgpg-error-devel%{?_isa} >= %{libgpg_error_min_ver}
-Requires(post): /sbin/install-info
-Requires(postun): /sbin/install-info
 
 %description devel
 %{summary}.
@@ -184,14 +182,6 @@ make check
 %doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
 %{_bindir}/%{name}-json
 %{_libdir}/lib%{name}.so.11*
-
-%post devel
-/sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
-
-%preun devel
-if [ $1 -eq 0 ] ; then
-  /sbin/install-info --delete %{_infodir}/%{name}.info %{_infodir}/dir 2>/dev/null || :
-fi
 
 %files devel
 %{_bindir}/%{name}-config
