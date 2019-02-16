@@ -18,6 +18,8 @@ Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
 
 ## upstream patches
+# https://dev.gnupg.org/T3815
+Patch0001:      0001-qt-Use-tofu-conflict-test-keys-without-expiry.patch
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
