@@ -10,7 +10,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.12.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -214,6 +214,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.12.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Wed Jun 05 2019 Miro Hrončok <mhroncok@redhat.com> - 1.12.0-2
 - Subpackage python2-gpg has been removed
   See https://fedoraproject.org/wiki/Changes/Mass_Python_2_Package_Removal
