@@ -9,18 +9,13 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.12.0
-Release:        3%{?dist}
+Version:        1.13.1
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
-Source0:        ftp://ftp.gnupg.org/gcrypt/gpgme/gpgme-%{version}.tar.bz2
+Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
-
-## upstream patches
-# https://dev.gnupg.org/T3815
-Patch0001:      0001-qt-Use-tofu-conflict-test-keys-without-expiry.patch
-Patch0002:      0001-python-bindings-callback-test.patch
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
@@ -130,8 +125,6 @@ Obsoletes:      platform-python-gpg < %{version}-%{release}
 # set it to a value which we know will be suppressed.
 sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 
-find -type f -name Makefile\* -exec sed -i -e 's|GPG = gpg|GPG = gpg2|' {} ';'
-
 %build
 ./autogen.sh
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
@@ -176,6 +169,7 @@ make check
 %doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
 %{_bindir}/%{name}-json
 %{_libdir}/lib%{name}.so.11*
+%{_libdir}/pkgconfig/%{name}*.pc
 
 %files devel
 %{_bindir}/%{name}-config
@@ -214,6 +208,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Mon Jul 29 18:46:42 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.13.1-1
+- Update to 1.13.1
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.12.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
