@@ -10,7 +10,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.13.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -166,10 +166,9 @@ make check
 
 %files
 %license COPYING*
-%doc AUTHORS ChangeLog NEWS README* THANKS TODO VERSION
+%doc AUTHORS NEWS README*
 %{_bindir}/%{name}-json
 %{_libdir}/lib%{name}.so.11*
-%{_libdir}/pkgconfig/%{name}*.pc
 
 %files devel
 %{_bindir}/%{name}-config
@@ -182,6 +181,7 @@ make check
 %{_libdir}/lib%{name}.so
 %{_datadir}/aclocal/%{name}.m4
 %{_infodir}/%{name}.info*
+%{_libdir}/pkgconfig/%{name}*.pc
 
 %files -n %{name}pp
 %doc lang/cpp/README
@@ -208,6 +208,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sat Aug  3 2019 Peter Robinson <pbrobinson@fedoraproject.org> 1.13.1-2
+- Move .pc files to devel so the base library doesn't pull in devel packages
+
 * Mon Jul 29 18:46:42 CEST 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.13.1-1
 - Update to 1.13.1
 
