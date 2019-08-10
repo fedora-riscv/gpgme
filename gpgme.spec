@@ -10,7 +10,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.13.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -25,8 +25,8 @@ Patch1002:      gpgme-1.3.2-largefile.patch
 # Let's fix stupid AX_PYTHON_DEVEL
 Patch1003:      0001-fix-stupid-ax_python_devel.patch
 
-BuildRequires:  autoconf
-BuildRequires:  automake
+#BuildRequires:  autoconf
+#BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gawk
@@ -126,7 +126,8 @@ Obsoletes:      platform-python-gpg < %{version}-%{release}
 sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 
 %build
-./autogen.sh
+# People neeed to learn that you can't run autogen.sh anymore
+#./autogen.sh
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
@@ -161,8 +162,6 @@ rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 %check
 make check
 %endif
-
-%ldconfig_scriptlets
 
 %files
 %license COPYING*
@@ -208,6 +207,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sat Aug 10 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.13.1-3
+- Set real VERSION
+
 * Sat Aug  3 2019 Peter Robinson <pbrobinson@fedoraproject.org> 1.13.1-2
 - Move .pc files to devel so the base library doesn't pull in devel packages
 
