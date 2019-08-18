@@ -128,6 +128,8 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 %build
 # People neeed to learn that you can't run autogen.sh anymore
 #./autogen.sh
+# Use -I... directly because of https://bugzilla.redhat.com/show_bug.cgi?id=1742986
+CFLAGS="%{optflags} -I/usr/include/libassuan2"
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
