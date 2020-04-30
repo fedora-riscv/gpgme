@@ -109,6 +109,15 @@ BuildRequires:  cmake
 %description -n q%{name}-devel
 %{summary}.
 
+%package -n python2-gpg
+Summary:        %{name} bindings for Python 2
+%{?python_provide:%python_provide python2-gpg}
+BuildRequires:  python2-devel
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+
+%description -n python2-gpg
+%{summary}.
+
 %package -n python3-gpg
 Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-gpg}
@@ -171,6 +180,8 @@ rm -vf %{buildroot}%{python3_sitelib}/gpg/install_files.txt
 make check
 %endif
 
+%ldconfig_scriptlets
+
 %files
 %license COPYING*
 %doc AUTHORS NEWS README*
@@ -208,6 +219,11 @@ make check
 %{_includedir}/QGpgME/
 %{_libdir}/libq%{name}.so
 %{_libdir}/cmake/QGpgme/
+
+%files -n python2-gpg
+%doc lang/python/README
+%{python2_sitearch}/gpg-*.egg-info
+%{python2_sitearch}/gpg/
 
 %files -n python3-gpg
 %doc lang/python/README
