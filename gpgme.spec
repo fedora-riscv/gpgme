@@ -9,8 +9,8 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.13.1
-Release:        8%{?dist}
+Version:        1.14.0
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -24,8 +24,6 @@ Patch1001:      0001-don-t-add-extra-libraries-for-linking.patch
 Patch1002:      gpgme-1.3.2-largefile.patch
 # Let's fix stupid AX_PYTHON_DEVEL
 Patch1003:      0001-fix-stupid-ax_python_devel.patch
-# Make the make check work with gnupg-2.2.19 and above
-Patch1004:      gpgme-build-with-gnupg-2.2.19.patch
 
 #BuildRequires:  autoconf
 #BuildRequires:  automake
@@ -215,6 +213,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sat Jul 18 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 1.14.0-1
+- Update to 1.14.0
+
 * Fri May 22 2020 Miro Hrončok <mhroncok@redhat.com> - 1.13.1-8
 - Rebuilt for Python 3.9
 
