@@ -111,6 +111,7 @@ BuildRequires:  cmake
 Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-gpg}
 BuildRequires:  python3-devel
+BuildRequires: make
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      platform-python-gpg < %{version}-%{release}
 
