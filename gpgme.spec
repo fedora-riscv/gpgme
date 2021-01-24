@@ -3,14 +3,13 @@
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
-# STATUS_KEY_CONSIDERED has been added in 2.1.13
-%global gnupg2_min_ver 2.1.13
-%global libgpg_error_min_ver 1.24
+%global gnupg2_min_ver 2.2.24
+%global libgpg_error_min_ver 1.36
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.14.0
-Release:        2%{?dist}
+Version:        1.15.1
+Release:        1%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -27,6 +26,7 @@ Patch1003:      0001-fix-stupid-ax_python_devel.patch
 
 #BuildRequires:  autoconf
 #BuildRequires:  automake
+BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gawk
@@ -111,7 +111,6 @@ BuildRequires:  cmake
 Summary:        %{name} bindings for Python 3
 %{?python_provide:%python_provide python3-gpg}
 BuildRequires:  python3-devel
-BuildRequires: make
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      platform-python-gpg < %{version}-%{release}
 
@@ -214,6 +213,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Sun Jan 24 2021 Igor Raits <ignatenkobrain@fedoraproject.org> - 1.15.1-1
+- Update to 1.15.1
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.14.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
