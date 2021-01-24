@@ -132,8 +132,6 @@ sed -i 's/3.8/%{python3_version}/g' configure
 %build
 # People neeed to learn that you can't run autogen.sh anymore
 #./autogen.sh
-# Use -I... directly because of https://bugzilla.redhat.com/show_bug.cgi?id=1742986
-CFLAGS="%{optflags} -I/usr/include/libassuan2"
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
@@ -190,7 +188,7 @@ make check
 
 %files -n %{name}pp
 %doc lang/cpp/README
-%{_libdir}/lib%{name}pp.so.*
+%{_libdir}/lib%{name}pp.so.6*
 
 %files -n %{name}pp-devel
 %{_includedir}/%{name}++/
@@ -199,7 +197,7 @@ make check
 
 %files -n q%{name}
 %doc lang/qt/README
-%{_libdir}/libq%{name}.so.*
+%{_libdir}/libq%{name}.so.7*
 
 %files -n q%{name}-devel
 %{_includedir}/q%{name}/
