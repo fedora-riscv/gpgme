@@ -9,7 +9,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.15.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -155,6 +155,7 @@ mv %{buildroot}%{_includedir}/gpgme.h \
 install -m644 -p -D %{SOURCE2} %{buildroot}%{_includedir}/gpgme.h
 %endif
 chrpath -d %{buildroot}%{_bindir}/%{name}-tool
+chrpath -d %{buildroot}%{_bindir}/%{name}-json
 chrpath -d %{buildroot}%{_libdir}/lib%{name}pp.so*
 chrpath -d %{buildroot}%{_libdir}/libq%{name}.so*
 
@@ -211,6 +212,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Wed Jun 02 2021 Miro Hrončok <mhroncok@redhat.com> - 1.15.1-3
+- Also remove RPATH from /usr/bin/gpgme-json
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.15.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
