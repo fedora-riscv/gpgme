@@ -9,7 +9,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.15.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -212,6 +212,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Thu Jun 03 2021 Python Maint <python-maint@redhat.com> - 1.15.1-4
+- Rebuilt for Python 3.10
+
 * Wed Jun 02 2021 Miro Hrončok <mhroncok@redhat.com> - 1.15.1-3
 - Also remove RPATH from /usr/bin/gpgme-json
 
