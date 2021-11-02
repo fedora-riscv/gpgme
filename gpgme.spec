@@ -9,7 +9,7 @@
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        1.15.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 
 License:        LGPLv2+
 URL:            https://gnupg.org/related_software/gpgme/
@@ -23,6 +23,9 @@ Patch1001:      0001-don-t-add-extra-libraries-for-linking.patch
 Patch1002:      gpgme-1.3.2-largefile.patch
 # Let's fix stupid AX_PYTHON_DEVEL
 Patch1003:      0001-fix-stupid-ax_python_devel.patch
+# Fix build with glibc >=2.34
+# See: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e
+Patch1004:      4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e.patch
 
 #BuildRequires:  autoconf
 #BuildRequires:  automake
@@ -212,6 +215,9 @@ make check
 %{python3_sitearch}/gpg/
 
 %changelog
+* Tue Nov 02 2021 Frantisek Sumsal <frantisek@sumsal.cz> - 1.15.1-6
+- Fix build with glibc >=2.34 (RHBZ#1984691, RHBZ#1987561)
+
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.15.1-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
