@@ -1,19 +1,2 @@
-# ignore sources
-/gpgme-[0-9].[0-9].[0-9].tar.bz2
-/gpgme-[0-9].[0-9].[0-9].tar.bz2.sig
-# ignore fedpkg local build artifacts
-/.build-*.log
-/gpgme-[0-9].[0-9].[0-9]/
-/gpgme-[0-9].[0-9].[0-9]-*.src.rpm
-/i686/
-/x86_64/
-# ignore emacs cruft
-/.#*
-/#*
-/gpgme-1.10.0.tar.bz2
-/gpgme-1.11.0.tar.bz2
-/gpgme-1.11.1.tar.bz2
-/gpgme-1.12.0.tar.bz2
-/gpgme-1.13.1.tar.bz2
-/gpgme-1.14.0.tar.bz2
-/gpgme-1.15.1.tar.bz2
+/gpgme-*.tar.bz2
+/gpgme-*.tar.bz2.sig
