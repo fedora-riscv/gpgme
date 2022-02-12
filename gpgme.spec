@@ -5,7 +5,7 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.16.0
+Version:        1.17.0
 Release:        %autorelease
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
@@ -13,9 +13,6 @@ License:        LGPLv2+ and MIT
 URL:            https://gnupg.org/related_software/gpgme/
 Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source2:        gpgme-multilib.h
-
-# Fix build with glibc >=2.34
-Patch0001:      https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=4b64774b6d13ffa4f59dddf947a97d61bcfa2f2e#/0001-core-Support-closefrom-also-for-glibc.patch
 
 ## downstream patches
 # Don't add extra libs/cflags in gpgme-config/cmake equivalent
