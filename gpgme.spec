@@ -130,6 +130,16 @@ sed -i 's/3.8/%{python3_version}/g' configure
 %build
 # People neeed to learn that you can't run autogen.sh anymore
 #./autogen.sh
+
+# Since 1.16.0, we need to explicitly pass -D_LARGEFILE_SOURCE and
+# -D_FILE_OFFSET_BITS=64 for the QT binding to build successfully on 32-bit
+# platforms.
+export CFLAGS='%{optflags} -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
+export CXXFLAGS='%{optflags} -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64'
+# Explicit new lines in C(XX)FLAGS can break naive build scripts
+export CFLAGS="$(echo ${CFLAGS} | tr '\n\\' '  ')"
+export CXXFLAGS="$(echo ${CXXFLAGS} | tr '\n\\' '  ')"
+
 %configure --disable-static --disable-silent-rules --enable-languages=cpp,qt,python
 %make_build
 
