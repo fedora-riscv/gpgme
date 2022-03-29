@@ -5,7 +5,7 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.17.0
+Version:        1.17.1
 Release:        %autorelease
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
@@ -206,7 +206,7 @@ make check
 
 %files -n q%{name}
 %doc lang/qt/README
-%{_libdir}/libq%{name}.so.7*
+%{_libdir}/libq%{name}.so.15*
 
 %files -n q%{name}-devel
 %{_includedir}/q%{name}/
