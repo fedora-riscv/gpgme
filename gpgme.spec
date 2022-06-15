@@ -1,4 +1,4 @@
-%bcond_without check
+%bcond_with check
 
 %global gnupg2_min_ver 2.2.24
 %global libgpg_error_min_ver 1.36
