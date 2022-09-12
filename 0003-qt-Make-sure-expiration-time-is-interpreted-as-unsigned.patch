@@ -1,0 +1,35 @@
+From c977424a1d39751fc5055131ad3f7819d421dcc8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Wed, 17 Aug 2022 14:51:19 +0200
+Subject: [PATCH] qt: Make sure expiration time is interpreted as unsigned
+ number
+
+* lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp (add_subkey): Convert
+expiration time to uint_least32_t.
+--
+
+This fixes the corresponding test on 32-bit systems where time_t (the
+return type of expirationTime()) is a signed 32-bit integer type.
+
+GnuPG-bug-id: 6137
+---
+ lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp b/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp
+index 32e2c292..b74e7a06 100644
+--- a/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp
++++ b/lang/qt/src/qgpgmeaddexistingsubkeyjob.cpp
+@@ -64,7 +64,8 @@ static QGpgMEAddExistingSubkeyJob::result_type add_subkey(Context *ctx, const Ke
+     std::unique_ptr<GpgAddExistingSubkeyEditInteractor> interactor{new GpgAddExistingSubkeyEditInteractor{subkey.keyGrip()}};
+ 
+     if (!subkey.neverExpires()) {
+-        const auto expiry = QDateTime::fromSecsSinceEpoch(subkey.expirationTime(), Qt::UTC).toString(u"yyyyMMdd'T'hhmmss").toStdString();
++        const auto expiry = QDateTime::fromSecsSinceEpoch(uint_least32_t(subkey.expirationTime()),
++                                                          Qt::UTC).toString(u"yyyyMMdd'T'hhmmss").toStdString();
+         interactor->setExpiry(expiry);
+     }
+ 
+-- 
+2.37.1
+

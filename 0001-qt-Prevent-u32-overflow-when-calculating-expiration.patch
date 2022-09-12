@@ -1,0 +1,78 @@
+From 7870fdbfeff47755138136dbd6648b18f6b4fc76 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ingo=20Kl=C3=B6cker?= <dev@ingo-kloecker.de>
+Date: Fri, 10 Jun 2022 11:54:03 +0200
+Subject: [PATCH] qt: Prevent u32 overflow when calculating expiration date
+
+* lang/qt/src/qgpgmesignkeyjob.cpp (sign_key): Change maxAllowedDate to
+2106-02-05. Change log-level from warning to debug.
+* lang/qt/tests/t-various.cpp (TestVarious::testSignKeyWithExpiration):
+Remove check for warning. Adapt assertion.
+--
+
+Capping the expiration date at 2106-02-05 prevents a u32 overflow when
+adding the number of days until the maximal date to the current time.
+
+GnuPG-bug-id: 5991
+---
+ lang/qt/src/qgpgmesignkeyjob.cpp | 6 +++---
+ lang/qt/src/signkeyjob.h         | 2 +-
+ lang/qt/tests/t-various.cpp      | 4 +---
+ 3 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/lang/qt/src/qgpgmesignkeyjob.cpp b/lang/qt/src/qgpgmesignkeyjob.cpp
+index 5036a9b9..506d64a1 100644
+--- a/lang/qt/src/qgpgmesignkeyjob.cpp
++++ b/lang/qt/src/qgpgmesignkeyjob.cpp
+@@ -127,11 +127,11 @@ static QGpgMESignKeyJob::result_type sign_key(Context *ctx, const Key &key, cons
+ 
+     if (expirationDate.isValid()) {
+         // on 2106-02-07, the Unix time will reach 0xFFFFFFFF; since gpg uses uint32 internally
+-        // for the expiration date clip it at 2106-02-06
+-        static const QDate maxAllowedDate{2106, 2, 6};
++        // for the expiration date clip it at 2106-02-05 to avoid problems with negative time zones
++        static const QDate maxAllowedDate{2106, 2, 5};
+         const auto clippedExpirationDate = expirationDate <= maxAllowedDate ? expirationDate : maxAllowedDate;
+         if (clippedExpirationDate != expirationDate) {
+-            qCWarning(QGPGME_LOG) << "Expiration of certification has been changed to" << clippedExpirationDate;
++            qCDebug(QGPGME_LOG) << "Expiration of certification has been changed to" << clippedExpirationDate;
+         }
+         // use the "days from now" format to specify the expiration date of the certification;
+         // this format is the most appropriate regardless of the local timezone
+diff --git a/lang/qt/src/signkeyjob.h b/lang/qt/src/signkeyjob.h
+index f4b3ed8f..d0e90c22 100644
+--- a/lang/qt/src/signkeyjob.h
++++ b/lang/qt/src/signkeyjob.h
+@@ -149,7 +149,7 @@ public:
+      * Sets the expiration date of the key signature to @a expiration. By default,
+      * key signatures do not expire.
+      *
+-     * Note: Expiration dates after 2106-02-06 will be set to 2106-02-06.
++     * Note: Expiration dates after 2106-02-05 will be set to 2106-02-05.
+      *
+      * Not pure virtual for ABI compatibility.
+      **/
+diff --git a/lang/qt/tests/t-various.cpp b/lang/qt/tests/t-various.cpp
+index b630350c..18360166 100644
+--- a/lang/qt/tests/t-various.cpp
++++ b/lang/qt/tests/t-various.cpp
+@@ -328,8 +328,6 @@ private Q_SLOTS:
+                     }
+                 });
+ 
+-        QTest::ignoreMessage(QtWarningMsg, "Expiration of certification has been changed to QDate(\"2106-02-06\")");
+-
+         job->start(target);
+         QSignalSpy spy{this, &TestVarious::asyncDone};
+         QVERIFY(spy.wait(QSIGNALSPY_TIMEOUT));
+@@ -339,7 +337,7 @@ private Q_SLOTS:
+         const auto keySignature = target.userID(0).signature(target.userID(0).numSignatures() - 1);
+         QVERIFY(!keySignature.neverExpires());
+         const auto expirationDate = QDateTime::fromSecsSinceEpoch(uint_least32_t(keySignature.expirationTime())).date();
+-        QCOMPARE(expirationDate, QDate(2106, 2, 6));  // expiration date is capped at 2106-02-06
++        QCOMPARE(expirationDate, QDate(2106, 2, 5));  // expiration date is capped at 2106-02-05
+     }
+ 
+     void testVersion()
+-- 
+2.37.1
+
